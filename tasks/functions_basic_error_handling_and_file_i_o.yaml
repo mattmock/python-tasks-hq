@@ -1,0 +1,85 @@
+category: Functions, Basic Error Handling & File I/O
+tasks:
+- category: Functions, Basic Error Handling & File I/O
+  title: Defining and Calling Functions
+  description: Write a simple function that takes two numbers as parameters and returns
+    their sum. Call this function with example inputs.
+  Approximate Complexity: 1
+  time est: 2
+  id: FBEHFIO-001
+- category: Functions, Basic Error Handling & File I/O
+  title: Defining and Calling Functions
+  description: Write a function that takes a list as input and returns a new list
+    containing only the even numbers from the original list.
+  Approximate Complexity: 2
+  time est: 3
+  id: FBEHFIO-002
+- category: Functions, Basic Error Handling & File I/O
+  title: Function Arguments
+  description: Write a function with one required argument and one optional argument
+    that has a default value. Demonstrate calling it with and without the optional
+    argument.
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-003
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic Error Handling (`try-except`)
+  description: Write code to access an element in a list by an index provided by user
+    input. Use a `try-except IndexError` block to print a friendly message if the
+    index is out of bounds.
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-004
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic Error Handling (`try-except`)
+  description: Write code to access a value in a dictionary by a key. Use a `try-except
+    KeyError` block for missing keys.
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-005
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic Error Handling (`try-except`)
+  description: Attempt to convert a user-input string to an integer and use `try-except
+    ValueError` to handle cases where the input is not a valid number.
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-006
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic File Reading (using `with open(...)`)
+  description: Create a simple text file (e.g., `data.txt`) with a few lines of text.
+  Approximate Complexity: 1
+  time est: 1
+  id: FBEHFIO-007
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic File Reading (using `with open(...)`)
+  description: Write a Python script to open `data.txt`, read all its content at once,
+    and print it.
+  Approximate Complexity: 2
+  time est: 2
+  id: FBEHFIO-008
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic File Reading (using `with open(...)`)
+  description: Modify the script to read the file line by line and print each line
+    (e.g., stripped of newline characters).
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-009
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic File Writing (using `with open(...)`)
+  description: Create a list of strings in your Python script.
+  Approximate Complexity: 1
+  time est: 0.5
+  id: FBEHFIO-010
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic File Writing (using `with open(...)`)
+  description: Write a script to create a new text file (e.g., `output.txt`) and write
+    each string from the list to the file, with each string on a new line.
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-011
+- category: Functions, Basic Error Handling & File I/O
+  title: Basic File Writing (using `with open(...)`)
+  description: Practice appending content to an existing file.
+  Approximate Complexity: 2
+  time est: 2.5
+  id: FBEHFIO-012

@@ -1,0 +1,141 @@
+category: String & Advanced Data Structure Operations
+tasks:
+- category: String & Advanced Data Structure Operations
+  title: String Slicing
+  description: Extract a specific substring from a given string using start, end,
+    and step.
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-001
+- category: String & Advanced Data Structure Operations
+  title: String Slicing
+  description: Reverse a string using slicing.
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-002
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`my_string.split(delimiter)`: Split a sentence into a list of words.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-003
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`delimiter.join(list_of_strings)`: Join a list of words back into
+    a sentence.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-004
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`my_string.strip()`, `my_string.lstrip()`, `my_string.rstrip()`: Remove
+    leading/trailing/both whitespace.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-005
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`my_string.find(substring)`, `my_string.index(substring)`: Find the
+    index of a substring (understand the difference if not found).'
+  Approximate Complexity: 2
+  time est: 2
+  id: SADSO-006
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`my_string.replace(old, new)`: Replace occurrences of a substring.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-007
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`my_string.lower()`, `my_string.upper()`, `my_string.capitalize()`,
+    `my_string.title()`: Case conversions.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-008
+- category: String & Advanced Data Structure Operations
+  title: Common String Methods (Practice with examples)
+  description: '`my_string.isalpha()`, `my_string.isdigit()`, `my_string.isalnum()`:
+    Character type checks.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-009
+- category: String & Advanced Data Structure Operations
+  title: Formatted Strings (`f-strings`)
+  description: Create formatted strings using `f-strings` to embed variables and simple
+    expressions.
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-010
+- category: String & Advanced Data Structure Operations
+  title: Advanced Dictionary Operations
+  description: Access a dictionary value safely using `my_dict.get(key, default_value)`.
+  Approximate Complexity: 2
+  time est: 1.5
+  id: SADSO-011
+- category: String & Advanced Data Structure Operations
+  title: Advanced Dictionary Operations
+  description: Iterate through a dictionary's keys using `my_dict.keys()`.
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-012
+- category: String & Advanced Data Structure Operations
+  title: Advanced Dictionary Operations
+  description: Iterate through a dictionary's values using `my_dict.values()`.
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-013
+- category: String & Advanced Data Structure Operations
+  title: Advanced Dictionary Operations
+  description: Iterate through a dictionary's key-value pairs using `my_dict.items()`.
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-014
+- category: String & Advanced Data Structure Operations
+  title: Advanced Dictionary Operations
+  description: Check if a key exists in a dictionary using the `in` operator.
+  Approximate Complexity: 1
+  time est: 0.5
+  id: SADSO-015
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Add an element to the end of a list: `my_list.append(element)`.'
+  Approximate Complexity: 1
+  time est: 0.5
+  id: SADSO-016
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Remove and return an element from a list by index: `my_list.pop(index)`.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-017
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Remove the first occurrence of an element by value: `my_list.remove(value)`.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-018
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Insert an element at a specific position: `my_list.insert(index, element)`.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-019
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Find the index of the first occurrence of an element: `my_list.index(value)`.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-020
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Count occurrences of an element: `my_list.count(value)`.'
+  Approximate Complexity: 1
+  time est: 1
+  id: SADSO-021
+- category: String & Advanced Data Structure Operations
+  title: Advanced List Methods
+  description: 'Reverse a list in-place: `my_list.reverse()`.'
+  Approximate Complexity: 1
+  time est: 0.5
+  id: SADSO-022

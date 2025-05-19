@@ -1,0 +1,35 @@
+category: Data Structure Fundamentals
+tasks:
+- category: Data Structure Fundamentals
+  title: Create a Tuple
+  description: Create tuples with various data types.
+  Approximate Complexity: 1
+  time est: 0.5
+  id: DSF-001
+- category: Data Structure Fundamentals
+  title: Create a Dictionary from a List
+  description: Given a list, create a dictionary where list elements become keys (assign
+    default or derived values).
+  Approximate Complexity: 2
+  time est: 2
+  id: DSF-002
+- category: Data Structure Fundamentals
+  title: Create a Set from a List
+  description: Convert a list into a set.
+  Approximate Complexity: 1
+  time est: 0.5
+  id: DSF-003
+- category: Data Structure Fundamentals
+  title: List Initialization (Repetition)
+  description: Create a list of a specific size filled with a repeating default value
+    (e.g., `ans = [0] * n` or `ans = [1] * len(nums)`).
+  Approximate Complexity: 1
+  time est: 0.5
+  id: DSF-004
+- category: Data Structure Fundamentals
+  title: List of Lists Initialization
+  description: Create a list containing a specific number of empty sub-lists (e.g.,
+    `matrix = [[] for _ in range(max_count)]`).
+  Approximate Complexity: 2
+  time est: 1
+  id: DSF-005

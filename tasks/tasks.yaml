@@ -1,0 +1,285 @@
+- category: "Data Structure Fundamentals"
+  title: "Create a Tuple"
+  description: "Create tuples with various data types."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "Data Structure Fundamentals"
+  title: "Create a Dictionary from a List"
+  description: "Given a list, create a dictionary where list elements become keys (assign default or derived values)."
+  'Approximate Complexity': 2
+  'time est': 2
+- category: "Data Structure Fundamentals"
+  title: "Create a Set from a List"
+  description: "Convert a list into a set."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "Data Structure Fundamentals"
+  title: "List Initialization (Repetition)"
+  description: "Create a list of a specific size filled with a repeating default value (e.g., `ans = [0] * n` or `ans = [1] * len(nums)`)."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "Data Structure Fundamentals"
+  title: "List of Lists Initialization"
+  description: "Create a list containing a specific number of empty sub-lists (e.g., `matrix = [[] for _ in range(max_count)]`)."
+  'Approximate Complexity': 2
+  'time est': 1
+- category: "Iteration & Control Flow"
+  title: "Basic List Iteration"
+  description: "Loop through a list and access each element."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "Iteration & Control Flow"
+  title: "Index-Based List Iteration"
+  description: "Loop through a list using its indices (e.g., `for i in range(len(my_list))`)."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "Iteration & Control Flow"
+  title: "Enumerated List Iteration"
+  description: "Loop through a list getting both index and value using `enumerate`."
+  'Approximate Complexity': 2
+  'time est': 1.5
+- category: "Iteration & Control Flow"
+  title: "Reversed List Iteration"
+  description: "Iterate through a list in reverse order."
+  'Approximate Complexity': 2
+  'time est': 1.5
+- category: "Iteration & Control Flow"
+  title: "2D List Iteration (Nested Loops)"
+  description: "Iterate through a list of lists, accessing elements in the inner lists."
+  'Approximate Complexity': 2
+  'time est': 2
+- category: "Iteration & Control Flow"
+  title: "Specific Range Iteration"
+  description: "Use a `for` loop with a specific `range` (e.g., `for r in range(1, len(prices))`)."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "Iteration & Control Flow"
+  title: "Iterating and Unpacking"
+  description: "Iterate through a list of tuples (or similar), unpacking elements directly in the loop (e.g., `for index, (val1, val2) in enumerate(tuple_array)`:)."
+  'Approximate Complexity': 2
+  'time est': 2
+- category: "Common Data Operations & Built-in Functions"
+  title: "Zipping Iterables"
+  description: "Combine two or more lists into a list of tuples using `zip()`."
+  'Approximate Complexity': 2
+  'time est': 1.5
+- category: "Common Data Operations & Built-in Functions"
+  title: "Basic Sorting"
+  description: "Sort a simple list of numbers or strings using `sorted()`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "Common Data Operations & Built-in Functions"
+  title: "Sorting with a Key (Lambda)"
+  description: "Sort a list of tuples/objects based on a specific attribute/element using the `key` argument with a lambda function (e.g., `sorted(my_list, key=lambda x: x[0])`)."
+  'Approximate Complexity': 3
+  'time est': 3
+- category: "Common Data Operations & Built-in Functions"
+  title: "In-Place Sorting with a Key"
+  description: "Perform an in-place sort on a list using its `.sort()` method, also using a `key` and `reverse` options."
+  'Approximate Complexity': 3
+  'time est': 3
+- category: "Common Data Operations & Built-in Functions"
+  title: "Combined Operations (e.g., Zip then Sort)"
+  description: "Zip two lists and then sort the resulting list of tuples (e.g., `fleets = sorted(zip(position, speed), key=lambda item: item[0])`)."
+  'Approximate Complexity': 3
+  'time est': 4
+- category: "String & Advanced Data Structure Operations"
+  title: "String Slicing"
+  description: "Extract a specific substring from a given string using start, end, and step."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "String Slicing"
+  description: "Reverse a string using slicing."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`my_string.split(delimiter)`: Split a sentence into a list of words."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`delimiter.join(list_of_strings)`: Join a list of words back into a sentence."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`my_string.strip()`, `my_string.lstrip()`, `my_string.rstrip()`: Remove leading/trailing/both whitespace."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`my_string.find(substring)`, `my_string.index(substring)`: Find the index of a substring (understand the difference if not found)."
+  'Approximate Complexity': 2
+  'time est': 2
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`my_string.replace(old, new)`: Replace occurrences of a substring."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`my_string.lower()`, `my_string.upper()`, `my_string.capitalize()`, `my_string.title()`: Case conversions."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Common String Methods (Practice with examples)"
+  description: "`my_string.isalpha()`, `my_string.isdigit()`, `my_string.isalnum()`: Character type checks."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Formatted Strings (`f-strings`)"
+  description: "Create formatted strings using `f-strings` to embed variables and simple expressions."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced Dictionary Operations"
+  description: "Access a dictionary value safely using `my_dict.get(key, default_value)`."
+  'Approximate Complexity': 2
+  'time est': 1.5
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced Dictionary Operations"
+  description: "Iterate through a dictionary's keys using `my_dict.keys()`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced Dictionary Operations"
+  description: "Iterate through a dictionary's values using `my_dict.values()`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced Dictionary Operations"
+  description: "Iterate through a dictionary's key-value pairs using `my_dict.items()`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced Dictionary Operations"
+  description: "Check if a key exists in a dictionary using the `in` operator."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Add an element to the end of a list: `my_list.append(element)`."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Remove and return an element from a list by index: `my_list.pop(index)`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Remove the first occurrence of an element by value: `my_list.remove(value)`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Insert an element at a specific position: `my_list.insert(index, element)`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Find the index of the first occurrence of an element: `my_list.index(value)`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Count occurrences of an element: `my_list.count(value)`."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "String & Advanced Data Structure Operations"
+  title: "Advanced List Methods"
+  description: "Reverse a list in-place: `my_list.reverse()`."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Defining and Calling Functions"
+  description: "Write a simple function that takes two numbers as parameters and returns their sum. Call this function with example inputs."
+  'Approximate Complexity': 1
+  'time est': 2
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Defining and Calling Functions"
+  description: "Write a function that takes a list as input and returns a new list containing only the even numbers from the original list."
+  'Approximate Complexity': 2
+  'time est': 3
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Function Arguments"
+  description: "Write a function with one required argument and one optional argument that has a default value. Demonstrate calling it with and without the optional argument."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic Error Handling (`try-except`)"
+  description: "Write code to access an element in a list by an index provided by user input. Use a `try-except IndexError` block to print a friendly message if the index is out of bounds."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic Error Handling (`try-except`)"
+  description: "Write code to access a value in a dictionary by a key. Use a `try-except KeyError` block for missing keys."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic Error Handling (`try-except`)"
+  description: "Attempt to convert a user-input string to an integer and use `try-except ValueError` to handle cases where the input is not a valid number."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic File Reading (using `with open(...)`)"
+  description: "Create a simple text file (e.g., `data.txt`) with a few lines of text."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic File Reading (using `with open(...)`)"
+  description: "Write a Python script to open `data.txt`, read all its content at once, and print it."
+  'Approximate Complexity': 2
+  'time est': 2
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic File Reading (using `with open(...)`)"
+  description: "Modify the script to read the file line by line and print each line (e.g., stripped of newline characters)."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic File Writing (using `with open(...)`)"
+  description: "Create a list of strings in your Python script."
+  'Approximate Complexity': 1
+  'time est': 0.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic File Writing (using `with open(...)`)"
+  description: "Write a script to create a new text file (e.g., `output.txt`) and write each string from the list to the file, with each string on a new line."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Functions, Basic Error Handling & File I/O"
+  title: "Basic File Writing (using `with open(...)`)"
+  description: "Practice appending content to an existing file."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Basic Object-Oriented Programming (OOP)"
+  title: "Define a Simple Class"
+  description: "Define a class (e.g., `Dog`, `Book`, `Car`)."
+  'Approximate Complexity': 1
+  'time est': 1
+- category: "Basic Object-Oriented Programming (OOP)"
+  title: "Constructor (`__init__`)"
+  description: "Add an `__init__` method to your class to initialize instance attributes (e.g., a `Dog` class with `name` and `breed` attributes)."
+  'Approximate Complexity': 2
+  'time est': 2.5
+- category: "Basic Object-Oriented Programming (OOP)"
+  title: "Instance Methods"
+  description: "Define at least one instance method that uses the instance's attributes (e.g., a `bark()` method for `Dog`, or a `get_info()` method for `Book`)."
+  'Approximate Complexity': 2
+  'time est': 3
+- category: "Basic Object-Oriented Programming (OOP)"
+  title: "Create Objects (Instances)"
+  description: "Create two or three instances (objects) of your defined class with different attribute values."
+  'Approximate Complexity': 1
+  'time est': 1.5
+- category: "Basic Object-Oriented Programming (OOP)"
+  title: "Access Attributes & Call Methods"
+  description: "Access the attributes of your created objects and call their methods. Print the results to verify."
+  'Approximate Complexity': 1
+  'time est': 1.5
+- category: "Basic Object-Oriented Programming (OOP)"
+  title: "Understanding `self`"
+  description: "Add comments to your class methods and constructor explaining the role and usage of `self`."
+  'Approximate Complexity': 2
+  'time est': 2

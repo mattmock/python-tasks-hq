@@ -1,0 +1,36 @@
+category: Common Data Operations & Built-in Functions
+tasks:
+- category: Common Data Operations & Built-in Functions
+  title: Zipping Iterables
+  description: Combine two or more lists into a list of tuples using `zip()`.
+  Approximate Complexity: 2
+  time est: 1.5
+  id: CDOBIF-001
+- category: Common Data Operations & Built-in Functions
+  title: Basic Sorting
+  description: Sort a simple list of numbers or strings using `sorted()`.
+  Approximate Complexity: 1
+  time est: 1
+  id: CDOBIF-002
+- category: Common Data Operations & Built-in Functions
+  title: Sorting with a Key (Lambda)
+  description: 'Sort a list of tuples/objects based on a specific attribute/element
+    using the `key` argument with a lambda function (e.g., `sorted(my_list, key=lambda
+    x: x[0])`).'
+  Approximate Complexity: 3
+  time est: 3
+  id: CDOBIF-003
+- category: Common Data Operations & Built-in Functions
+  title: In-Place Sorting with a Key
+  description: Perform an in-place sort on a list using its `.sort()` method, also
+    using a `key` and `reverse` options.
+  Approximate Complexity: 3
+  time est: 3
+  id: CDOBIF-004
+- category: Common Data Operations & Built-in Functions
+  title: Combined Operations (e.g., Zip then Sort)
+  description: 'Zip two lists and then sort the resulting list of tuples (e.g., `fleets
+    = sorted(zip(position, speed), key=lambda item: item[0])`).'
+  Approximate Complexity: 3
+  time est: 4
+  id: CDOBIF-005

@@ -1,0 +1,43 @@
+category: Basic Object-Oriented Programming (OOP)
+tasks:
+- category: Basic Object-Oriented Programming (OOP)
+  title: Define a Simple Class
+  description: Define a class (e.g., `Dog`, `Book`, `Car`).
+  Approximate Complexity: 1
+  time est: 1
+  id: BOOPO-001
+- category: Basic Object-Oriented Programming (OOP)
+  title: Constructor (`__init__`)
+  description: Add an `__init__` method to your class to initialize instance attributes
+    (e.g., a `Dog` class with `name` and `breed` attributes).
+  Approximate Complexity: 2
+  time est: 2.5
+  id: BOOPO-002
+- category: Basic Object-Oriented Programming (OOP)
+  title: Instance Methods
+  description: Define at least one instance method that uses the instance's attributes
+    (e.g., a `bark()` method for `Dog`, or a `get_info()` method for `Book`).
+  Approximate Complexity: 2
+  time est: 3
+  id: BOOPO-003
+- category: Basic Object-Oriented Programming (OOP)
+  title: Create Objects (Instances)
+  description: Create two or three instances (objects) of your defined class with
+    different attribute values.
+  Approximate Complexity: 1
+  time est: 1.5
+  id: BOOPO-004
+- category: Basic Object-Oriented Programming (OOP)
+  title: Access Attributes & Call Methods
+  description: Access the attributes of your created objects and call their methods.
+    Print the results to verify.
+  Approximate Complexity: 1
+  time est: 1.5
+  id: BOOPO-005
+- category: Basic Object-Oriented Programming (OOP)
+  title: Understanding `self`
+  description: Add comments to your class methods and constructor explaining the role
+    and usage of `self`.
+  Approximate Complexity: 2
+  time est: 2
+  id: BOOPO-006

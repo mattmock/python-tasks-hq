@@ -1,0 +1,46 @@
+category: Iteration & Control Flow
+tasks:
+- category: Iteration & Control Flow
+  title: Basic List Iteration
+  description: Loop through a list and access each element.
+  Approximate Complexity: 1
+  time est: 1
+  id: ICF-001
+- category: Iteration & Control Flow
+  title: Index-Based List Iteration
+  description: Loop through a list using its indices (e.g., `for i in range(len(my_list))`).
+  Approximate Complexity: 1
+  time est: 1
+  id: ICF-002
+- category: Iteration & Control Flow
+  title: Enumerated List Iteration
+  description: Loop through a list getting both index and value using `enumerate`.
+  Approximate Complexity: 2
+  time est: 1.5
+  id: ICF-003
+- category: Iteration & Control Flow
+  title: Reversed List Iteration
+  description: Iterate through a list in reverse order.
+  Approximate Complexity: 2
+  time est: 1.5
+  id: ICF-004
+- category: Iteration & Control Flow
+  title: 2D List Iteration (Nested Loops)
+  description: Iterate through a list of lists, accessing elements in the inner lists.
+  Approximate Complexity: 2
+  time est: 2
+  id: ICF-005
+- category: Iteration & Control Flow
+  title: Specific Range Iteration
+  description: Use a `for` loop with a specific `range` (e.g., `for r in range(1,
+    len(prices))`).
+  Approximate Complexity: 1
+  time est: 1
+  id: ICF-006
+- category: Iteration & Control Flow
+  title: Iterating and Unpacking
+  description: Iterate through a list of tuples (or similar), unpacking elements directly
+    in the loop (e.g., `for index, (val1, val2) in enumerate(tuple_array)`:).
+  Approximate Complexity: 2
+  time est: 2
+  id: ICF-007
