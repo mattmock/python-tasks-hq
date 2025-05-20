@@ -16,6 +16,7 @@ yarn.lock
 .vscode/
 *.swp
 *.swo
+.eslintrc.json
 
 # OS
 .DS_Store

@@ -5,5 +5,11 @@
 		}
 	],
 	"settings": {
+		"css.validate": true,
+		"less.validate": true,
+		"scss.validate": true,
+		"stylelint.validate": ["css", "scss"],
+		"css.lint.unknownProperties": "ignore",
+		"css.lint.validProperties": []
 	}
 }
