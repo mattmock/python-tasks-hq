@@ -34,14 +34,24 @@
 .search-bar-container {
     width: 100%;
     max-width: 1000px;
-    margin: 0 auto 1.5rem auto;
+    margin: 0 auto;
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.search-bar-container:has(.selected-categories:not(:empty)) {
+    margin-bottom: 1.5rem;
+}
+
+.search-section {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
 }
 
 .task-search {
     width: 100%;
-    max-width: 350px;
     padding: 0.75rem 1rem;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
@@ -54,4 +64,83 @@
 
 .task-search:focus {
     border-color: var(--accent-primary);
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+.autocomplete-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1rem;
+    transition: background 0.15s;
+}
+.autocomplete-item:hover, .autocomplete-item.active {
+    background: var(--accent-primary);
+    color: #fff;
+}
+
+.selected-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    min-height: 2.2rem;
+    width: 100%;
+    max-width: 350px;
+}
+
+.category-pill {
+    display: flex;
+    align-items: center;
+    background: var(--accent-primary);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem 0.3rem 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+    max-width: 200px;
+}
+
+.category-pill span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+}
+
+.category-pill .remove-pill {
+    margin-left: 0.5rem;
+    font-size: 1.1em;
+    cursor: pointer;
+    color: #fff;
+    background: none;
+    border: none;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.category-pill:hover {
+    background: var(--accent-hover);
 } 

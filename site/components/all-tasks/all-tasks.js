@@ -7,6 +7,7 @@ export class AllTasks extends BaseComponent {
         this.allTasks = [];
         this.filteredTasks = [];
         this.cardElements = [];
+        this.selectedCategories = new Set();
         this.initialize();
     }
 
@@ -82,22 +83,53 @@ export class AllTasks extends BaseComponent {
 
     setupEventListeners() {
         const searchInput = this.shadowRoot.querySelector('.task-search');
+        const dropdown = this.shadowRoot.querySelector('.autocomplete-dropdown');
+        const selectedCategoriesContainer = this.shadowRoot.querySelector('.selected-categories');
+
         if (searchInput) {
+            // Show/hide dropdown on focus/blur
+            searchInput.addEventListener('focus', () => this.updateDropdown(searchInput.value));
+            searchInput.addEventListener('blur', (e) => {
+                // Delay hiding dropdown to allow for clicks
+                setTimeout(() => dropdown.style.display = 'none', 200);
+            });
+
+            // Update dropdown as user types
             const debouncedSearch = this.debounce((query) => {
-                // First, filter by title matches
-                const titleMatches = this.allTasks.filter(task => this.fuzzyMatch(task.title, query));
-                // Then, filter by category matches (excluding those already in titleMatches)
-                const categoryMatches = this.allTasks.filter(task =>
-                    !titleMatches.includes(task) && this.fuzzyMatch(task.category, query)
-                );
-                this.filteredTasks = [...titleMatches, ...categoryMatches];
-                this.displayTasks(this.filteredTasks);
+                this.updateDropdown(query);
+                this.filterTasks();
             }, 200);
+
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.trim().toLowerCase();
                 debouncedSearch(query);
             });
         }
+
+        // Handle dropdown clicks
+        dropdown.addEventListener('click', (e) => {
+            const item = e.target.closest('.autocomplete-item');
+            if (item) {
+                const category = item.textContent.trim();
+                this.selectedCategories.add(category);
+                this.updatePills();
+                this.filterTasks();
+                searchInput.value = '';
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Handle pill removal
+        selectedCategoriesContainer.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.remove-pill');
+            if (removeBtn) {
+                const pill = removeBtn.closest('.category-pill');
+                const category = pill.textContent.replace('×', '').trim();
+                this.selectedCategories.delete(category);
+                this.updatePills();
+                this.filterTasks();
+            }
+        });
     }
 
     debounce(fn, delay) {
@@ -143,6 +175,73 @@ export class AllTasks extends BaseComponent {
         this.cardElements.forEach(({ id, card }) => {
             card.style.display = showIds.has(id) ? '' : 'none';
         });
+    }
+
+    updateDropdown(query) {
+        const dropdown = this.shadowRoot.querySelector('.autocomplete-dropdown');
+        if (!dropdown) return;
+
+        // Get all unique categories from tasks
+        const allCategories = [...new Set(this.allTasks.map(task => task.category))];
+        
+        // Filter out already selected categories
+        const availableCategories = allCategories.filter(cat => !this.selectedCategories.has(cat));
+        
+        // Filter categories based on query
+        const matchingCategories = availableCategories.filter(cat => 
+            this.fuzzyMatch(cat, query)
+        );
+
+        if (matchingCategories.length > 0 && query) {
+            dropdown.innerHTML = matchingCategories
+                .map(cat => `<div class="autocomplete-item">${cat}</div>`)
+                .join('');
+            dropdown.style.display = 'block';
+        } else {
+            dropdown.style.display = 'none';
+        }
+    }
+
+    updatePills() {
+        const container = this.shadowRoot.querySelector('.selected-categories');
+        if (!container) return;
+
+        container.innerHTML = [...this.selectedCategories]
+            .map(cat => `
+                <div class="category-pill">
+                    <span>${cat}</span>
+                    <button class="remove-pill">×</button>
+                </div>
+            `)
+            .join('');
+    }
+
+    filterTasks() {
+        const searchInput = this.shadowRoot.querySelector('.task-search');
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+        // First filter by selected categories
+        let filtered = this.allTasks;
+        if (this.selectedCategories.size > 0) {
+            filtered = filtered.filter(task => 
+                this.selectedCategories.has(task.category)
+            );
+        }
+
+        // Then filter by search query
+        if (query) {
+            const titleMatches = filtered.filter(task => 
+                this.fuzzyMatch(task.title, query)
+            );
+            const categoryMatches = filtered.filter(task =>
+                !titleMatches.includes(task) && 
+                this.fuzzyMatch(task.category, query)
+            );
+            filtered = [...titleMatches, ...categoryMatches];
+        }
+
+        this.filteredTasks = filtered;
+        this.displayTasks(this.filteredTasks);
     }
 }
 
