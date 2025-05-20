@@ -96,6 +96,14 @@ export class HomePage extends BaseComponent {
         return tasks;
     }
 
+    shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
     displayTasks(tasks) {
         console.log('Displaying tasks...');
         const grid = this.shadowRoot.querySelector('.task-grid');
@@ -105,8 +113,9 @@ export class HomePage extends BaseComponent {
         }
         grid.innerHTML = '';
 
-        // Limit to 8 tasks
-        const limitedTasks = tasks.slice(0, 8);
+        // Shuffle tasks and limit to 8
+        const shuffledTasks = this.shuffleArray([...tasks]);
+        const limitedTasks = shuffledTasks.slice(0, 8);
 
         // Render each task as a <task-card> web component
         limitedTasks.forEach(task => {
