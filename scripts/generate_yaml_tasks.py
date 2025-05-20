@@ -69,7 +69,7 @@ def parse_csv_to_yaml():
 
 def generate_category_files():
     # Read the main tasks YAML file
-    with open('tasks/tasks.yaml', 'r') as f:
+    with open('data/tasks/tasks.yaml', 'r') as f:
         tasks = yaml.safe_load(f)
 
     # Group tasks by category

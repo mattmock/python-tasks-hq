@@ -4,20 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Tasks</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/view-all.css">
-    <script src="js/common.js"></script>
-    <script src="js/home.js"></script>
+    <link rel="stylesheet" href="components/home-page/home-page.css">
+    <link rel="stylesheet" href="components/task-card/task-card.css">
 </head>
 <body>
-    <div class="admin-header">
-        <h1>Python Tasks</h1>
-        <a href="view-all.html" class="page-button">View All Tasks</a>
-    </div>
-    <div id="tasks-container"></div>
+    <home-page></home-page>
+    <script type="module">
+        import './components/base/base-component.js';
+        import './components/task-card/task-card.js';
+        import './components/home-page/home-page.js';
+    </script>
 </body>
 </html> 
