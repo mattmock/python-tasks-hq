@@ -3,6 +3,26 @@
     padding: 2rem;
 }
 
+.page-header {
+    text-align: left;
+    margin-bottom: 2.5rem;
+    width: 100%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 0.5rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: -0.02em;
+    text-align: left;
+}
+
 .task-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr);
