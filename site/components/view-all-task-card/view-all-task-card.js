@@ -20,21 +20,10 @@ export class ViewAllTaskCard extends TaskCard {
     }
 
     updateContent() {
-        const taskData = this.getTaskData();
-        const categoryEl = this.shadowRoot.querySelector('.task-category');
-        const titleEl = this.shadowRoot.querySelector('.task-title');
+        super.updateContent();  // Use the base class's updateContent which handles code blocks
         const descriptionEl = this.shadowRoot.querySelector('.task-description');
-        const cardEl = this.shadowRoot.querySelector('.task-card');
-
-        if (categoryEl) categoryEl.textContent = taskData.category || '';
-        if (titleEl) titleEl.textContent = taskData.title || '';
         if (descriptionEl) {
-            descriptionEl.textContent = taskData.description || '';
             this.checkDescriptionOverflow(descriptionEl);
-        }
-
-        if (cardEl) {
-            cardEl.classList.toggle('completed', taskData.completed);
         }
     }
 
