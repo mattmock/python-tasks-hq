@@ -8,7 +8,7 @@
 .task-card {
     display: flex;
     flex-direction: column;
-    height: 280px;
+    height: 100%;
     padding: 1.25rem;
     background-color: var(--bg-secondary, #222) !important;
     border-radius: var(--border-radius, 16px) !important;
@@ -67,8 +67,8 @@
     background-color: var(--bg-tertiary);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
-    max-height: 140px;
-    overflow-y: auto;
+    max-height: none;
+    overflow-y: visible;
     position: relative;
     margin-bottom: 0.75rem;
     flex: 1;
@@ -174,4 +174,10 @@
     white-space: pre;
     overflow-x: auto;
     line-height: 1.5;
+}
+
+::slotted([slot="action"]) {
+    margin-top: auto;
+    width: 100%;
+    display: block;
 } 
