@@ -5,9 +5,9 @@
 
 .task-grid {
     display: grid !important;
-    grid-template-columns: repeat(4, 320px);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
-    max-width: calc(4 * 320px + 3 * 1.5rem);
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0.5rem;
     justify-content: center;
@@ -16,29 +16,22 @@
 :host .task-card, .task-card {
     height: 100%;
     min-height: 180px;
-    max-height: 220px;
-    width: 320px;
+    max-height: 280px;
+    width: 100%;
     max-width: 100%;
 }
 
 /* Responsive adjustments */
-@media (max-width: 1400px) {
+@media (max-width: 900px) {
     .task-grid {
-        grid-template-columns: repeat(3, 320px);
-        max-width: calc(3 * 320px + 2 * 1.5rem);
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
     }
 }
 
-@media (max-width: 1100px) {
-    .task-grid {
-        grid-template-columns: repeat(2, 320px);
-        max-width: calc(2 * 320px + 1 * 1.5rem);
-    }
-}
-
-@media (max-width: 700px) {
+@media (max-width: 600px) {
     .task-grid {
         grid-template-columns: 1fr;
-        max-width: 100%;
+        max-width: 400px;
     }
 } 

@@ -61,6 +61,26 @@ export class TaskCard extends BaseComponent {
         }
     }
 
+    processCodeBlocks(text) {
+        if (!text) return '';
+        
+        // Replace code blocks with proper HTML
+        return text.replace(/`([^`]+)`/g, (match, code) => {
+            // If the code contains newlines, wrap it in a pre tag
+            if (code.includes('\n')) {
+                return `<pre><code>${this.escapeHtml(code)}</code></pre>`;
+            }
+            // Otherwise, just use a code tag
+            return `<code>${this.escapeHtml(code)}</code>`;
+        });
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     updateContent() {
         if (!this._templateLoaded) return;
 
@@ -78,7 +98,7 @@ export class TaskCard extends BaseComponent {
 
             if (categoryEl) categoryEl.textContent = category || '';
             if (titleEl) titleEl.innerHTML = title || '';
-            if (descriptionEl) descriptionEl.innerHTML = description || '';
+            if (descriptionEl) descriptionEl.innerHTML = this.processCodeBlocks(description) || '';
             if (completeButton) completeButton.textContent = completed ? 'Mark Incomplete' : 'Mark Complete';
 
             if (cardEl) {

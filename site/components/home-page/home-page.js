@@ -105,8 +105,11 @@ export class HomePage extends BaseComponent {
         }
         grid.innerHTML = '';
 
+        // Limit to 8 tasks
+        const limitedTasks = tasks.slice(0, 8);
+
         // Render each task as a <task-card> web component
-        tasks.forEach(task => {
+        limitedTasks.forEach(task => {
             const taskCard = document.createElement('task-card');
             if (task.id) taskCard.setAttribute('data-task-id', task.id);
             if (task.category) taskCard.setAttribute('data-category', task.category);
