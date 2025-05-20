@@ -98,7 +98,11 @@ export class TaskCard extends BaseComponent {
 
             if (categoryEl) categoryEl.textContent = category || '';
             if (titleEl) titleEl.innerHTML = title || '';
-            if (descriptionEl) descriptionEl.innerHTML = this.processCodeBlocks(description) || '';
+            if (descriptionEl) {
+                descriptionEl.innerHTML = this.processCodeBlocks(description) || '';
+                // Check for overflow after content is set
+                this.checkDescriptionOverflow(descriptionEl);
+            }
             if (completeButton) completeButton.textContent = completed ? 'Mark Incomplete' : 'Mark Complete';
 
             if (cardEl) {
@@ -111,6 +115,12 @@ export class TaskCard extends BaseComponent {
         } catch (error) {
             console.error('Error updating task card content:', error);
         }
+    }
+
+    checkDescriptionOverflow(descriptionEl) {
+        // Check if content height is greater than container height
+        const hasOverflow = descriptionEl.scrollHeight > descriptionEl.clientHeight;
+        descriptionEl.classList.toggle('has-overflow', hasOverflow);
     }
 
     toggleCompletion() {

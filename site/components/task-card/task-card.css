@@ -30,7 +30,7 @@
     font-size: 1.15rem;
     font-weight: 500;
     color: var(--text-primary);
-    margin: 0.5rem 0 0.75rem 0;
+    margin: 0.25rem 0 0.5rem 0;
     padding: 0.5rem 0.75rem;
     background-color: transparent;
     border-radius: var(--border-radius);
@@ -45,11 +45,46 @@
     font-size: 0.95rem;
     line-height: 1.6;
     color: var(--text-secondary);
-    padding: 1rem;
+    padding: 0.75rem;
     background-color: var(--bg-secondary);
     border-radius: var(--border-radius);
     border: 1px solid var(--bg-tertiary);
-    min-height: 0;
+    max-height: 140px;
+    overflow-y: auto;
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+/* Add fade effect for truncated text - only when content overflows */
+.task-description.has-overflow::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(transparent, var(--bg-secondary));
+    pointer-events: none;
+    opacity: 0.9;
+}
+
+/* Style the scrollbar */
+.task-description::-webkit-scrollbar {
+    width: 6px;
+}
+
+.task-description::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+}
+
+.task-description::-webkit-scrollbar-thumb {
+    background: var(--accent-primary);
+    border-radius: 3px;
+}
+
+.task-description::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
 }
 
 .task-description code {
@@ -85,7 +120,6 @@
 
 .complete-button {
     margin-top: auto;
-    margin-bottom: 1rem;
     padding: 0.5rem 1rem;
     background-color: var(--accent-primary);
     color: var(--text-primary);
