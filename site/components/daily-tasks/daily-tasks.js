@@ -1,5 +1,5 @@
 import { BaseComponent } from '../base/base-component.js';
-import { TaskCard } from '../task-card/task-card.js';
+import { DailyTaskCard } from '../daily-task-card/daily-task-card.js';
 
 export class DailyTasks extends BaseComponent {
     constructor() {
@@ -95,7 +95,7 @@ export class DailyTasks extends BaseComponent {
         const limitedTasks = shuffledTasks.slice(0, 8);
 
         limitedTasks.forEach(task => {
-            const taskCard = document.createElement('task-card');
+            const taskCard = document.createElement('daily-task-card');
             if (task.id) taskCard.setAttribute('data-task-id', task.id);
             if (task.category) taskCard.setAttribute('data-category', task.category);
             if (task.title) taskCard.setAttribute('data-title', task.title);

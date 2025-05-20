@@ -1,15 +1,16 @@
 export class BaseComponent extends HTMLElement {
-    static globalSheet = null;
-
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-    }
-
-    // Helper method to create and attach styles using adoptedStyleSheets
-    attachStyles(styles) {
-        // Prepend CSS variables (no @import)
-        const cssVars = `
+        
+        // Create a container div for all content
+        this.container = document.createElement('div');
+        this.container.className = 'component-container';
+        this.shadowRoot.appendChild(this.container);
+        
+        // Add CSS variables to shadow root
+        const style = document.createElement('style');
+        style.textContent = `
             :host {
                 --bg-primary: #1a1a1a;
                 --bg-secondary: #2d2d2d;
@@ -28,28 +29,31 @@ export class BaseComponent extends HTMLElement {
                 --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 --font-family-mono: 'JetBrains Mono', monospace;
             }
-        `;
-        const fullStyles = cssVars + styles;
 
-        // Always use Constructable Stylesheets (adoptedStyleSheets)
-        if (!BaseComponent.globalSheet) {
-            BaseComponent.globalSheet = new CSSStyleSheet();
-            BaseComponent.globalSheet.replaceSync(fullStyles);
-        }
-        this.shadowRoot.adoptedStyleSheets = [BaseComponent.globalSheet];
+            .component-container {
+                display: contents;
+            }
+        `;
+        this.shadowRoot.appendChild(style);
+    }
+
+    // Helper method to create and attach styles
+    attachStyles(styles) {
+        const styleElement = document.createElement('style');
+        styleElement.textContent = styles;
+        this.shadowRoot.appendChild(styleElement);
     }
 
     // Helper method to create and attach template
     attachTemplate(template) {
-        // Clear everything except adoptedStyleSheets
-        while (this.shadowRoot.firstChild) {
-            this.shadowRoot.removeChild(this.shadowRoot.firstChild);
-        }
+        // Clear the container
+        this.container.innerHTML = '';
+        
         // Add new content
         const templateDiv = document.createElement('div');
         templateDiv.innerHTML = template;
         while (templateDiv.firstChild) {
-            this.shadowRoot.appendChild(templateDiv.firstChild);
+            this.container.appendChild(templateDiv.firstChild);
         }
     }
 

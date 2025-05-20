@@ -1,5 +1,5 @@
 import { BaseComponent } from '../base/base-component.js';
-import { TaskCard } from '../task-card/task-card.js';
+import { ViewAllTaskCard } from '../view-all-task-card/view-all-task-card.js';
 
 export class AllTasks extends BaseComponent {
     constructor() {
@@ -84,7 +84,7 @@ export class AllTasks extends BaseComponent {
 
         grid.innerHTML = '';
         tasks.forEach(task => {
-            const taskCard = document.createElement('task-card');
+            const taskCard = document.createElement('view-all-task-card');
             if (task.id) taskCard.setAttribute('data-task-id', task.id);
             if (task.category) taskCard.setAttribute('data-category', task.category);
             if (task.title) taskCard.setAttribute('data-title', task.title);
