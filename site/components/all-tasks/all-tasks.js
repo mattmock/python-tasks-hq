@@ -1,7 +1,7 @@
 import { BaseComponent } from '../base/base-component.js';
 import { TaskCard } from '../task-card/task-card.js';
 
-export class HomePage extends BaseComponent {
+export class AllTasks extends BaseComponent {
     constructor() {
         super();
         this.initialize();
@@ -12,46 +12,21 @@ export class HomePage extends BaseComponent {
             await this.loadStyles();
             await this.loadTemplate();
             await this.loadTasks();
-            this.setupEventListeners();
         } catch (error) {
-            console.error('Error initializing component:', error);
+            console.error('Error initializing AllTasks:', error);
         }
     }
 
     async loadStyles() {
-        const response = await fetch('/site/components/home-page/home-page.css');
+        const response = await fetch('/site/components/all-tasks/all-tasks.css');
         const styles = await response.text();
         this.attachStyles(styles);
     }
 
     async loadTemplate() {
-        const response = await fetch('/site/components/home-page/home-page.html');
+        const response = await fetch('/site/components/all-tasks/all-tasks.html');
         const template = await response.text();
         this.attachTemplate(template);
-    }
-
-    setupEventListeners() {
-        const toggleButton = this.shadowRoot.querySelector('.view-toggle');
-        if (toggleButton) {
-            toggleButton.addEventListener('click', () => this.toggleView());
-        }
-    }
-
-    toggleView() {
-        const dailyTasks = this.shadowRoot.querySelector('.daily-tasks');
-        const allTasks = this.shadowRoot.querySelector('.all-tasks');
-        const toggleButton = this.shadowRoot.querySelector('.view-toggle');
-        
-        if (dailyTasks.style.display !== 'none') {
-            dailyTasks.style.display = 'none';
-            allTasks.style.display = 'grid';
-            toggleButton.textContent = 'Back to Daily Tasks';
-            this.displayAllTasks();
-        } else {
-            dailyTasks.style.display = 'grid';
-            allTasks.style.display = 'none';
-            toggleButton.textContent = 'View All Tasks';
-        }
     }
 
     async loadTasks() {
@@ -59,7 +34,7 @@ export class HomePage extends BaseComponent {
             const response = await fetch('/data/tasks/tasks.yaml');
             const yamlText = await response.text();
             const tasks = this.parseYamlTasks(yamlText);
-            this.displayDailyTasks(tasks);
+            this.displayTasks(tasks);
         } catch (error) {
             console.error('Error loading tasks:', error);
         }
@@ -103,48 +78,21 @@ export class HomePage extends BaseComponent {
         return tasks;
     }
 
-    displayDailyTasks(tasks) {
-        const grid = this.shadowRoot.querySelector('.daily-tasks');
+    displayTasks(tasks) {
+        const grid = this.shadowRoot.querySelector('.task-grid');
         if (!grid) return;
 
         grid.innerHTML = '';
-        const shuffledTasks = this.shuffleArray([...tasks]);
-        const limitedTasks = shuffledTasks.slice(0, 8);
-
-        limitedTasks.forEach(task => {
+        tasks.forEach(task => {
             const taskCard = document.createElement('task-card');
             if (task.id) taskCard.setAttribute('data-task-id', task.id);
             if (task.category) taskCard.setAttribute('data-category', task.category);
             if (task.title) taskCard.setAttribute('data-title', task.title);
             if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', 'false');
+            taskCard.setAttribute('data-completed', task.completed.toString());
             grid.appendChild(taskCard);
         });
-    }
-
-    displayAllTasks() {
-        const grid = this.shadowRoot.querySelector('.all-tasks');
-        if (!grid) return;
-
-        grid.innerHTML = '';
-        this.allTasks.forEach(task => {
-            const taskCard = document.createElement('task-card');
-            if (task.id) taskCard.setAttribute('data-task-id', task.id);
-            if (task.category) taskCard.setAttribute('data-category', task.category);
-            if (task.title) taskCard.setAttribute('data-title', task.title);
-            if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', 'false');
-            grid.appendChild(taskCard);
-        });
-    }
-
-    shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
     }
 }
 
-customElements.define('home-page', HomePage); 
+customElements.define('all-tasks', AllTasks); 

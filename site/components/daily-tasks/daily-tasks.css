@@ -1,0 +1,32 @@
+.task-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0.5rem;
+    justify-content: center;
+}
+
+:host .task-card, .task-card {
+    height: 100%;
+    min-height: 180px;
+    max-height: 280px;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .task-grid {
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 600px) {
+    .task-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+} 

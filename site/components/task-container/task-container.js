@@ -1,7 +1,7 @@
 import { BaseComponent } from '../base/base-component.js';
 import { TaskCard } from '../task-card/task-card.js';
 
-export class HomePage extends BaseComponent {
+export class TaskContainer extends BaseComponent {
     constructor() {
         super();
         this.initialize();
@@ -14,18 +14,18 @@ export class HomePage extends BaseComponent {
             await this.loadTasks();
             this.setupEventListeners();
         } catch (error) {
-            console.error('Error initializing component:', error);
+            console.error('Error initializing TaskContainer:', error);
         }
     }
 
     async loadStyles() {
-        const response = await fetch('/site/components/home-page/home-page.css');
+        const response = await fetch('/site/components/task-container/task-container.css');
         const styles = await response.text();
         this.attachStyles(styles);
     }
 
     async loadTemplate() {
-        const response = await fetch('/site/components/home-page/home-page.html');
+        const response = await fetch('/site/components/task-container/task-container.html');
         const template = await response.text();
         this.attachTemplate(template);
     }
@@ -38,19 +38,21 @@ export class HomePage extends BaseComponent {
     }
 
     toggleView() {
-        const dailyTasks = this.shadowRoot.querySelector('.daily-tasks');
-        const allTasks = this.shadowRoot.querySelector('.all-tasks');
+        const dailyTasks = this.shadowRoot.querySelector('daily-tasks');
+        const allTasks = this.shadowRoot.querySelector('all-tasks');
         const toggleButton = this.shadowRoot.querySelector('.view-toggle');
+        const header = this.shadowRoot.querySelector('h1');
         
         if (dailyTasks.style.display !== 'none') {
             dailyTasks.style.display = 'none';
-            allTasks.style.display = 'grid';
+            allTasks.style.display = 'block';
             toggleButton.textContent = 'Back to Daily Tasks';
-            this.displayAllTasks();
+            header.textContent = 'All Python Tasks';
         } else {
-            dailyTasks.style.display = 'grid';
+            dailyTasks.style.display = 'block';
             allTasks.style.display = 'none';
             toggleButton.textContent = 'View All Tasks';
+            header.textContent = 'Daily Python Tasks';
         }
     }
 
@@ -58,8 +60,8 @@ export class HomePage extends BaseComponent {
         try {
             const response = await fetch('/data/tasks/tasks.yaml');
             const yamlText = await response.text();
-            const tasks = this.parseYamlTasks(yamlText);
-            this.displayDailyTasks(tasks);
+            this.allTasks = this.parseYamlTasks(yamlText);
+            this.displayDailyTasks();
         } catch (error) {
             console.error('Error loading tasks:', error);
         }
@@ -103,12 +105,12 @@ export class HomePage extends BaseComponent {
         return tasks;
     }
 
-    displayDailyTasks(tasks) {
+    displayDailyTasks() {
         const grid = this.shadowRoot.querySelector('.daily-tasks');
         if (!grid) return;
 
         grid.innerHTML = '';
-        const shuffledTasks = this.shuffleArray([...tasks]);
+        const shuffledTasks = this.shuffleArray([...this.allTasks]);
         const limitedTasks = shuffledTasks.slice(0, 8);
 
         limitedTasks.forEach(task => {
@@ -117,7 +119,7 @@ export class HomePage extends BaseComponent {
             if (task.category) taskCard.setAttribute('data-category', task.category);
             if (task.title) taskCard.setAttribute('data-title', task.title);
             if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', 'false');
+            taskCard.setAttribute('data-completed', task.completed.toString());
             grid.appendChild(taskCard);
         });
     }
@@ -133,7 +135,7 @@ export class HomePage extends BaseComponent {
             if (task.category) taskCard.setAttribute('data-category', task.category);
             if (task.title) taskCard.setAttribute('data-title', task.title);
             if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', 'false');
+            taskCard.setAttribute('data-completed', task.completed.toString());
             grid.appendChild(taskCard);
         });
     }
@@ -147,4 +149,4 @@ export class HomePage extends BaseComponent {
     }
 }
 
-customElements.define('home-page', HomePage); 
+customElements.define('task-container', TaskContainer); 
