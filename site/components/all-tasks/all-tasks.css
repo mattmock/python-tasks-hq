@@ -38,6 +38,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    user-select: none;
 }
 
 .search-bar-container:has(.selected-categories:not(:empty)) {
@@ -106,6 +107,7 @@
     min-height: 2.2rem;
     width: 100%;
     max-width: 350px;
+    user-select: none;
 }
 
 .category-pill {
