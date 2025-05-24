@@ -12,6 +12,7 @@ export class DailyTasks extends BaseComponent {
             await this.loadStyles();
             await this.loadTemplate();
             await this.loadTasks();
+            this.setupEventListeners();
         } catch (error) {
             console.error('Error initializing DailyTasks:', error);
         }
@@ -29,78 +30,84 @@ export class DailyTasks extends BaseComponent {
         this.attachTemplate(template);
     }
 
+    setupEventListeners() {
+        const shuffleButton = this.shadowRoot.querySelector('.shuffle-button');
+        if (shuffleButton) {
+            shuffleButton.addEventListener('click', () => this.shuffleTasks());
+        }
+    }
+
     async loadTasks() {
         try {
-            const response = await fetch('/data/tasks/tasks.yaml');
-            const yamlText = await response.text();
-            const tasks = this.parseYamlTasks(yamlText);
-            this.displayTasks(tasks);
+            const response = await fetch('/tasks/today');
+            const tasks = await response.json();
+            if (Array.isArray(tasks)) {
+                this.displayTasks(tasks);
+                this.checkCompletionState(tasks);
+            } else {
+                console.error('Invalid tasks response:', tasks);
+                this.displayTasks([]);
+                this.checkCompletionState([]);
+            }
         } catch (error) {
             console.error('Error loading tasks:', error);
+            this.displayTasks([]);
+            this.checkCompletionState([]);
         }
     }
 
-    parseYamlTasks(yamlText) {
-        const tasks = [];
-        const lines = yamlText.split('\n');
-        let currentTask = null;
-
-        for (const line of lines) {
-            const trimmedLine = line.trim();
-            
-            if (!trimmedLine) continue;
-
-            if (trimmedLine.startsWith('- category:')) {
-                if (currentTask) {
-                    tasks.push(currentTask);
+    async shuffleTasks() {
+        try {
+            const response = await fetch('/tasks/today/shuffle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-                currentTask = {
-                    id: tasks.length + 1,
-                    category: trimmedLine.replace('- category:', '').trim().replace(/"/g, ''),
-                    title: '',
-                    description: '',
-                    completed: false
-                };
-            }
-            else if (currentTask) {
-                if (trimmedLine.startsWith('title:')) {
-                    currentTask.title = trimmedLine.replace('title:', '').trim().replace(/"/g, '');
-                } else if (trimmedLine.startsWith('description:')) {
-                    currentTask.description = trimmedLine.replace('description:', '').trim().replace(/"/g, '');
-                }
-            }
+            });
+            const tasks = await response.json();
+            this.displayTasks(tasks);
+            this.checkCompletionState(tasks);
+        } catch (error) {
+            console.error('Error shuffling tasks:', error);
         }
-
-        if (currentTask) {
-            tasks.push(currentTask);
-        }
-
-        return tasks;
     }
 
-    shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
+    checkCompletionState(tasks) {
+        const completionMessage = this.shadowRoot.querySelector('.completion-message');
+        const taskGrid = this.shadowRoot.querySelector('.task-grid');
+        
+        if (tasks.length === 0) {
+            completionMessage.style.display = 'block';
+            taskGrid.style.display = 'none';
+        } else {
+            completionMessage.style.display = 'none';
+            taskGrid.style.display = 'grid';
         }
-        return array;
     }
 
-    displayTasks(tasks) {
+    async displayTasks(tasks) {
         const grid = this.shadowRoot.querySelector('.task-grid');
         if (!grid) return;
 
-        grid.innerHTML = '';
-        const shuffledTasks = this.shuffleArray([...tasks]);
-        const limitedTasks = shuffledTasks.slice(0, 8);
+        // Get completed tasks
+        const completedResponse = await fetch('/tasks/completed');
+        const completedTasks = await completedResponse.json();
+        const completedTaskIds = new Set(completedTasks.map(t => t.id));
 
-        limitedTasks.forEach(task => {
+        grid.innerHTML = '';
+        tasks.forEach(task => {
             const taskCard = document.createElement('daily-task-card');
-            if (task.id) taskCard.setAttribute('data-task-id', task.id);
-            if (task.category) taskCard.setAttribute('data-category', task.category);
-            if (task.title) taskCard.setAttribute('data-title', task.title);
-            if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', task.completed.toString());
+            taskCard.setAttribute('data-task-id', task.id);
+            taskCard.setAttribute('data-category', task.category);
+            taskCard.setAttribute('data-title', task.title);
+            taskCard.setAttribute('data-description', task.description);
+            taskCard.setAttribute('data-completed', completedTaskIds.has(task.id).toString());
+            
+            // Listen for task completion
+            taskCard.addEventListener('daily-task-completed', () => {
+                this.loadTasks(); // Reload tasks to check completion state
+            });
+            
             grid.appendChild(taskCard);
         });
     }

@@ -11,7 +11,6 @@ export class TaskContainer extends BaseComponent {
         try {
             await this.loadStyles();
             await this.loadTemplate();
-            await this.loadTasks();
             this.setupEventListeners();
         } catch (error) {
             console.error('Error initializing TaskContainer:', error);
@@ -56,96 +55,16 @@ export class TaskContainer extends BaseComponent {
         }
     }
 
-    async loadTasks() {
-        try {
-            const response = await fetch('/data/tasks/tasks.yaml');
-            const yamlText = await response.text();
-            this.allTasks = this.parseYamlTasks(yamlText);
-            this.displayDailyTasks();
-        } catch (error) {
-            console.error('Error loading tasks:', error);
-        }
-    }
-
-    parseYamlTasks(yamlText) {
-        const tasks = [];
-        const lines = yamlText.split('\n');
-        let currentTask = null;
-
-        for (const line of lines) {
-            const trimmedLine = line.trim();
-            
-            if (!trimmedLine) continue;
-
-            if (trimmedLine.startsWith('- category:')) {
-                if (currentTask) {
-                    tasks.push(currentTask);
-                }
-                currentTask = {
-                    id: tasks.length + 1,
-                    category: trimmedLine.replace('- category:', '').trim().replace(/"/g, ''),
-                    title: '',
-                    description: '',
-                    completed: false
-                };
-            }
-            else if (currentTask) {
-                if (trimmedLine.startsWith('title:')) {
-                    currentTask.title = trimmedLine.replace('title:', '').trim().replace(/"/g, '');
-                } else if (trimmedLine.startsWith('description:')) {
-                    currentTask.description = trimmedLine.replace('description:', '').trim().replace(/"/g, '');
-                }
-            }
-        }
-
-        if (currentTask) {
-            tasks.push(currentTask);
-        }
-
-        return tasks;
-    }
-
     displayDailyTasks() {
-        const grid = this.shadowRoot.querySelector('.daily-tasks');
-        if (!grid) return;
-
-        grid.innerHTML = '';
-        const shuffledTasks = this.shuffleArray([...this.allTasks]);
-        const limitedTasks = shuffledTasks.slice(0, 8);
-
-        limitedTasks.forEach(task => {
-            const taskCard = document.createElement('task-card');
-            if (task.id) taskCard.setAttribute('data-task-id', task.id);
-            if (task.category) taskCard.setAttribute('data-category', task.category);
-            if (task.title) taskCard.setAttribute('data-title', task.title);
-            if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', task.completed.toString());
-            grid.appendChild(taskCard);
-        });
+        const dailyTasks = this.shadowRoot.querySelector('daily-tasks');
+        if (!dailyTasks) return;
+        dailyTasks.style.display = 'block';
     }
 
     displayAllTasks() {
-        const grid = this.shadowRoot.querySelector('.all-tasks');
-        if (!grid) return;
-
-        grid.innerHTML = '';
-        this.allTasks.forEach(task => {
-            const taskCard = document.createElement('task-card');
-            if (task.id) taskCard.setAttribute('data-task-id', task.id);
-            if (task.category) taskCard.setAttribute('data-category', task.category);
-            if (task.title) taskCard.setAttribute('data-title', task.title);
-            if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', task.completed.toString());
-            grid.appendChild(taskCard);
-        });
-    }
-
-    shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
+        const allTasks = this.shadowRoot.querySelector('all-tasks');
+        if (!allTasks) return;
+        allTasks.style.display = 'block';
     }
 }
 

@@ -51,7 +51,7 @@
     max-width: 350px;
 }
 
-.task-search {
+.search-input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid var(--border-color);
@@ -63,7 +63,7 @@
     transition: border-color 0.2s;
 }
 
-.task-search:focus {
+.search-input:focus {
     border-color: var(--accent-primary);
 }
 

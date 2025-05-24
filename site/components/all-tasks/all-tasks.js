@@ -12,10 +12,14 @@ export class AllTasks extends BaseComponent {
     }
 
     async initialize() {
-        await this.loadStyles();
-        await this.loadTemplate();
-        await this.loadTasks();
-        this.setupEventListeners();
+        try {
+            await this.loadStyles();
+            await this.loadTemplate();
+            await this.loadTasks();
+            this.setupEventListeners();
+        } catch (error) {
+            console.error('Error initializing AllTasks:', error);
+        }
     }
 
     async loadStyles() {
@@ -32,9 +36,14 @@ export class AllTasks extends BaseComponent {
 
     async loadTasks() {
         try {
-            const response = await fetch('/data/tasks/tasks.yaml');
-            const yamlText = await response.text();
-            this.allTasks = this.parseYamlTasks(yamlText);
+            const response = await fetch('/tasks');
+            const tasks = await response.json();
+            // Add IDs to tasks if they don't have them
+            this.allTasks = tasks.map((task, index) => ({
+                ...task,
+                id: task.id || `task-${index + 1}`,
+                completed: false
+            }));
             this.filteredTasks = this.allTasks;
             this.renderAllCards(this.allTasks);
             this.displayTasks(this.filteredTasks);
@@ -43,68 +52,33 @@ export class AllTasks extends BaseComponent {
         }
     }
 
-    parseYamlTasks(yamlText) {
-        const tasks = [];
-        const lines = yamlText.split('\n');
-        let currentTask = null;
-
-        for (const line of lines) {
-            const trimmedLine = line.trim();
-            
-            if (!trimmedLine) continue;
-
-            if (trimmedLine.startsWith('- category:')) {
-                if (currentTask) {
-                    tasks.push(currentTask);
-                }
-                currentTask = {
-                    id: tasks.length + 1,
-                    category: trimmedLine.replace('- category:', '').trim().replace(/"/g, ''),
-                    title: '',
-                    description: '',
-                    completed: false
-                };
-            }
-            else if (currentTask) {
-                if (trimmedLine.startsWith('title:')) {
-                    currentTask.title = trimmedLine.replace('title:', '').trim().replace(/"/g, '');
-                } else if (trimmedLine.startsWith('description:')) {
-                    currentTask.description = trimmedLine.replace('description:', '').trim().replace(/"/g, '');
-                }
-            }
-        }
-
-        if (currentTask) {
-            tasks.push(currentTask);
-        }
-
-        return tasks;
-    }
-
     setupEventListeners() {
-        const searchInput = this.shadowRoot.querySelector('.task-search');
+        const searchInput = this.shadowRoot.querySelector('.search-input');
         const dropdown = this.shadowRoot.querySelector('.autocomplete-dropdown');
         const selectedCategoriesContainer = this.shadowRoot.querySelector('.selected-categories');
 
-        if (searchInput) {
-            // Show/hide dropdown on focus/blur
-            searchInput.addEventListener('focus', () => this.updateDropdown(searchInput.value));
-            searchInput.addEventListener('blur', (e) => {
-                // Delay hiding dropdown to allow for clicks
-                setTimeout(() => dropdown.style.display = 'none', 200);
-            });
-
-            // Update dropdown as user types
-            const debouncedSearch = this.debounce((query) => {
-                this.updateDropdown(query);
-                this.filterTasks();
-            }, 200);
-
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.trim().toLowerCase();
-                debouncedSearch(query);
-            });
+        if (!searchInput || !dropdown || !selectedCategoriesContainer) {
+            console.error('Required elements not found in all-tasks component');
+            return;
         }
+
+        // Show/hide dropdown on focus/blur
+        searchInput.addEventListener('focus', () => this.updateDropdown(searchInput.value));
+        searchInput.addEventListener('blur', (e) => {
+            // Delay hiding dropdown to allow for clicks
+            setTimeout(() => dropdown.style.display = 'none', 200);
+        });
+
+        // Update dropdown as user types with debounce
+        const debouncedSearch = this.debounce((query) => {
+            this.updateDropdown(query);
+            this.filterTasks();
+        }, 200);
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            debouncedSearch(query);
+        });
 
         // Handle dropdown clicks
         dropdown.addEventListener('click', (e) => {
@@ -146,6 +120,7 @@ export class AllTasks extends BaseComponent {
         // Simple fuzzy match: all query chars must appear in order in text
         let t = 0, q = 0;
         text = text.toLowerCase();
+        query = query.toLowerCase();
         while (t < text.length && q < query.length) {
             if (text[t] === query[q]) q++;
             t++;
@@ -163,7 +138,7 @@ export class AllTasks extends BaseComponent {
             if (task.category) taskCard.setAttribute('data-category', task.category);
             if (task.title) taskCard.setAttribute('data-title', task.title);
             if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', task.completed.toString());
+            taskCard.setAttribute('data-completed', (task.completed || false).toString());
             grid.appendChild(taskCard);
             return { id: task.id, card: taskCard };
         });
@@ -206,18 +181,18 @@ export class AllTasks extends BaseComponent {
         const container = this.shadowRoot.querySelector('.selected-categories');
         if (!container) return;
 
-        container.innerHTML = [...this.selectedCategories]
-            .map(cat => `
+        container.innerHTML = Array.from(this.selectedCategories)
+            .map(category => `
                 <div class="category-pill">
-                    <span>${cat}</span>
-                    <button class="remove-pill">×</button>
+                    ${category}
+                    <span class="remove-pill">×</span>
                 </div>
             `)
             .join('');
     }
 
     filterTasks() {
-        const searchInput = this.shadowRoot.querySelector('.task-search');
+        const searchInput = this.shadowRoot.querySelector('.search-input');
         const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
         // First filter by selected categories
@@ -237,7 +212,12 @@ export class AllTasks extends BaseComponent {
                 !titleMatches.includes(task) && 
                 this.fuzzyMatch(task.category, query)
             );
-            filtered = [...titleMatches, ...categoryMatches];
+            const descriptionMatches = filtered.filter(task =>
+                !titleMatches.includes(task) && 
+                !categoryMatches.includes(task) &&
+                this.fuzzyMatch(task.description, query)
+            );
+            filtered = [...titleMatches, ...categoryMatches, ...descriptionMatches];
         }
 
         this.filteredTasks = filtered;

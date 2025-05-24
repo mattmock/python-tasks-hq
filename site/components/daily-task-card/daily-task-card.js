@@ -10,7 +10,6 @@ export class DailyTaskCard extends TaskCard {
     }
 
     setupEventListeners() {
-        // No need to inject the button, just set up the event listener
         const button = this.shadowRoot.querySelector('button[slot="content"]');
         if (button) {
             button.removeEventListener('click', this._boundMarkComplete);
@@ -19,17 +18,32 @@ export class DailyTaskCard extends TaskCard {
         }
     }
 
-    markComplete() {
+    async markComplete() {
+        const taskId = this.getAttribute('data-task-id');
         const completed = this.getAttribute('data-completed') === 'true';
-        this.setAttribute('data-completed', (!completed).toString());
-        this.dispatchEvent(new CustomEvent('daily-task-completed', {
-            detail: { taskId: this.getAttribute('data-task-id'), completed: !completed },
-            bubbles: true,
-            composed: true
-        }));
-        // Update button text
-        const button = this.shadowRoot.querySelector('button[slot="content"]');
-        if (button) button.textContent = !completed ? 'Mark Incomplete' : 'Mark Complete';
+        
+        try {
+            const response = await fetch(`/tasks/today/${taskId}/complete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                this.setAttribute('data-completed', (!completed).toString());
+                // Update button text
+                const button = this.shadowRoot.querySelector('button[slot="content"]');
+                if (button) button.textContent = !completed ? 'Mark Incomplete' : 'Mark Complete';
+                
+                // Add visual feedback
+                this.classList.toggle('completed', !completed);
+            } else {
+                console.error('Failed to mark task as complete');
+            }
+        } catch (error) {
+            console.error('Error marking task as complete:', error);
+        }
     }
 
     attributeChangedCallback(name, oldValue, newValue) {

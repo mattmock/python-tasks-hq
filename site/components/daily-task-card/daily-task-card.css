@@ -6,11 +6,21 @@
     flex-direction: column;
     gap: 1rem;
     transition: all 0.2s ease;
+    position: relative;
 }
 
 .task-card.completed {
     opacity: 0.7;
     background-color: var(--background-tertiary);
+}
+
+.task-card.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #4CAF50;
+    font-size: 24px;
 }
 
 .task-header {
@@ -26,18 +36,25 @@
 }
 
 .complete-button {
-    background-color: var(--accent-primary);
-    color: var(--text-primary);
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
     border: none;
-    border-radius: var(--border-radius);
-    padding: 0.5rem 1rem;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease;
 }
 
 .complete-button:hover {
-    background-color: var(--accent-hover);
+    background-color: #45a049;
+}
+
+.task-card.completed .complete-button {
+    background-color: #f44336;
+}
+
+.task-card.completed .complete-button:hover {
+    background-color: #da190b;
 }
 
 .task-title {
