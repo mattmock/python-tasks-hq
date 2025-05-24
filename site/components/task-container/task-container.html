@@ -1,8 +1,32 @@
 <div class="task-manager">
     <div class="page-header">
         <h1>Daily Python Tasks</h1>
-        <button class="page-button view-toggle">View All Tasks</button>
+        <div class="header-buttons">
+            <button class="page-button reset-button" title="Get new tasks for today" id="resetButton">
+                <svg class="recycle-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+                </svg>
+            </button>
+            <button class="page-button view-toggle">View All Tasks</button>
+        </div>
     </div>
     <daily-tasks></daily-tasks>
     <all-tasks style="display: none;"></all-tasks>
+    <dialog id="resetDialog" class="reset-dialog">
+        <form method="dialog">
+            <header>
+                <h3>Reset Daily Tasks</h3>
+                <button class="close-button" onclick="this.closest('dialog').close('close')">×</button>
+            </header>
+            <article>
+                <p>Are you sure you want to get new tasks? This will reset your progress for today.</p>
+            </article>
+            <footer>
+                <menu>
+                    <button autofocus type="reset" onclick="this.closest('dialog').close('cancel')">Cancel</button>
+                    <button type="submit" value="confirm">Get New Tasks</button>
+                </menu>
+            </footer>
+        </form>
+    </dialog>
 </div> 

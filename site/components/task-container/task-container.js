@@ -30,28 +30,55 @@ export class TaskContainer extends BaseComponent {
     }
 
     setupEventListeners() {
-        const toggleButton = this.shadowRoot.querySelector('.view-toggle');
-        if (toggleButton) {
-            toggleButton.addEventListener('click', () => this.toggleView());
-        }
-    }
-
-    toggleView() {
+        const viewToggle = this.shadowRoot.querySelector('.view-toggle');
+        const resetButton = this.shadowRoot.querySelector('.reset-button');
+        const resetDialog = this.shadowRoot.querySelector('#resetDialog');
         const dailyTasks = this.shadowRoot.querySelector('daily-tasks');
         const allTasks = this.shadowRoot.querySelector('all-tasks');
-        const toggleButton = this.shadowRoot.querySelector('.view-toggle');
-        const header = this.shadowRoot.querySelector('h1');
-        
-        if (dailyTasks.style.display !== 'none') {
-            dailyTasks.style.display = 'none';
-            allTasks.style.display = 'block';
-            toggleButton.textContent = 'Back to Daily Tasks';
-            header.textContent = 'All Python Tasks';
-        } else {
-            dailyTasks.style.display = 'block';
-            allTasks.style.display = 'none';
-            toggleButton.textContent = 'View All Tasks';
-            header.textContent = 'Daily Python Tasks';
+
+        if (viewToggle) {
+            viewToggle.addEventListener('click', () => {
+                const isAllTasks = allTasks.style.display !== 'none';
+                allTasks.style.display = isAllTasks ? 'none' : 'block';
+                dailyTasks.style.display = isAllTasks ? 'block' : 'none';
+                viewToggle.textContent = isAllTasks ? 'View All Tasks' : 'View Daily Tasks';
+                
+                // Update header text
+                const header = this.shadowRoot.querySelector('h1');
+                if (header) {
+                    header.textContent = isAllTasks ? 'Daily Python Tasks' : 'All Python Tasks';
+                }
+            });
+        }
+
+        if (resetButton && resetDialog) {
+            resetButton.addEventListener('click', () => {
+                resetDialog.showModal();
+            });
+
+            resetDialog.addEventListener('close', async (event) => {
+                if (event.target.returnValue === 'confirm') {
+                    try {
+                        const response = await fetch('/tasks/today/shuffle', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to reset tasks');
+                        }
+
+                        // Reload daily tasks
+                        if (dailyTasks) {
+                            dailyTasks.reload();
+                        }
+                    } catch (error) {
+                        console.error('Error resetting tasks:', error);
+                    }
+                }
+            });
         }
     }
 
