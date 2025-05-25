@@ -28,16 +28,22 @@ export class DailyTaskCard extends TaskCard {
                 user-select: none;
             }
 
-            .complete-button:hover {
+            .complete-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                pointer-events: none;
+            }
+
+            .complete-button:not(:disabled):hover {
                 background: var(--accent-hover);
             }
 
-            .complete-button.completed {
+            .complete-button.completed:not(:disabled) {
                 background: var(--bg-tertiary);
                 color: var(--text-secondary);
             }
 
-            .complete-button.completed:hover {
+            .complete-button.completed:not(:disabled):hover {
                 background: var(--bg-secondary);
                 color: var(--text-primary);
             }
@@ -60,9 +66,13 @@ export class DailyTaskCard extends TaskCard {
 
         const button = document.createElement('button');
         button.className = 'complete-button';
+        button.setAttribute('type', 'button'); // Ensure it's a button type
         const isCompleted = this.getAttribute('data-completed') === 'true';
         button.textContent = isCompleted ? 'Mark Not Done' : 'Mark Complete';
         if (isCompleted) button.classList.add('completed');
+        
+        // Ensure button starts enabled
+        button.disabled = false;
         
         const container = document.createElement('div');
         container.slot = 'content';
@@ -78,7 +88,13 @@ export class DailyTaskCard extends TaskCard {
             if (this._boundMarkComplete) {
                 button.removeEventListener('click', this._boundMarkComplete);
             }
-            this._boundMarkComplete = this.markComplete.bind(this);
+            
+            // Create new bound function
+            this._boundMarkComplete = async (e) => {
+                e.preventDefault();
+                await this.markComplete();
+            };
+            
             button.addEventListener('click', this._boundMarkComplete);
         }
     }
@@ -87,7 +103,7 @@ export class DailyTaskCard extends TaskCard {
         super.attributeChangedCallback(name, oldValue, newValue);
         if (name === 'data-completed' && oldValue !== newValue) {
             const button = this.querySelector('.complete-button');
-            if (button) {
+            if (button && !this._requestInProgress) { // Only update if not in middle of update
                 const isCompleted = newValue === 'true';
                 button.textContent = isCompleted ? 'Mark Not Done' : 'Mark Complete';
                 button.classList.toggle('completed', isCompleted);
@@ -96,9 +112,15 @@ export class DailyTaskCard extends TaskCard {
     }
 
     async markComplete() {
+        const button = this.querySelector('.complete-button');
+        if (!button) return;
+
+        // Disable the button immediately
+        button.disabled = true;
+
         const taskId = this.getAttribute('data-task-id');
         const completed = this.getAttribute('data-completed') === 'true';
-        
+
         try {
             const response = await fetch(`/tasks/today/${taskId}/complete`, {
                 method: 'POST',
@@ -106,35 +128,15 @@ export class DailyTaskCard extends TaskCard {
                 body: JSON.stringify({ completed: !completed })
             });
             
-            if (response.ok) {
-                // Update the attribute which will trigger attributeChangedCallback
+            const data = await response.json();
+            if (response.ok && data.success) {
                 this.setAttribute('data-completed', (!completed).toString());
-                
-                // Dispatch event for parent components
-                this.dispatchEvent(new CustomEvent('daily-task-completed', {
-                    bubbles: true,
-                    composed: true,
-                    detail: { taskId, completed: !completed }
-                }));
-            } else {
-                console.error('Failed to update task completion status');
-                throw new Error('Failed to update task completion status');
             }
         } catch (error) {
             console.error('Error updating task completion status:', error);
-            // Show error to user
-            const button = this.querySelector('.complete-button');
-            if (button) {
-                const originalText = button.textContent;
-                const originalClass = button.className;
-                button.textContent = 'Error!';
-                button.style.background = '#ff4444';
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = '';
-                    button.className = originalClass;
-                }, 2000);
-            }
+        } finally {
+            // Re-enable the button
+            button.disabled = false;
         }
     }
 }

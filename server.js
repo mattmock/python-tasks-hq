@@ -7,6 +7,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const MAX_DAILY_TASKS = 8;
 
+// Add request logging
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+    next();
+});
+
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -222,30 +228,62 @@ app.post('/tasks/today/shuffle', (req, res) => {
 
 // Mark a task as complete
 app.post('/tasks/today/:taskId/complete', (req, res) => {
+    console.log(`Updating task ${req.params.taskId} completion to:`, req.body.completed);
+    
     try {
         const taskId = req.params.taskId;
-        const { completed } = req.body; // Get the desired completion state from request body
-        const fileContents = fs.readFileSync(TODAYS_TASKS_FILE, 'utf8');
-        const todaysTasks = JSON.parse(fileContents);
+        const { completed } = req.body;
+        
+        // Ensure the file exists first
+        if (!fs.existsSync(TODAYS_TASKS_FILE)) {
+            console.error('Today\'s tasks file does not exist');
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+
+        let todaysTasks;
+        try {
+            const fileContents = fs.readFileSync(TODAYS_TASKS_FILE, 'utf8');
+            todaysTasks = JSON.parse(fileContents);
+            if (!Array.isArray(todaysTasks)) {
+                throw new Error('Invalid tasks format');
+            }
+        } catch (error) {
+            console.error('Error reading/parsing today\'s tasks:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
         
         // Find the task
         const taskIndex = todaysTasks.findIndex(t => t.id === taskId);
-        if (taskIndex !== -1) {
-            // Update completion status in today's tasks based on request
-            todaysTasks[taskIndex].completed = completed;
-            fs.writeFileSync(TODAYS_TASKS_FILE, JSON.stringify(todaysTasks, null, 2));
-            
-            // Only update last completed time if marking as complete
-            if (completed) {
-                updateLastCompleted(taskId);
-            }
-            
-            res.json({ success: true });
-        } else {
-            res.json({ error: 'Task not found in today\'s tasks' });
+        if (taskIndex === -1) {
+            console.error(`Task ${taskId} not found`);
+            return res.status(404).json({ error: 'Task not found in today\'s tasks' });
         }
+
+        // Update completion status
+        todaysTasks[taskIndex].completed = completed;
+        
+        try {
+            fs.writeFileSync(TODAYS_TASKS_FILE, JSON.stringify(todaysTasks, null, 2));
+        } catch (error) {
+            console.error('Error writing today\'s tasks:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        
+        // Only update last completed time if marking as complete
+        if (completed) {
+            try {
+                updateLastCompleted(taskId);
+            } catch (error) {
+                console.error('Error updating last completed:', error);
+                // Don't fail the request if this fails
+            }
+        }
+        
+        console.log(`Task ${taskId} completion updated successfully`);
+        res.json({ success: true });
     } catch (error) {
-        res.json({ error: error.message });
+        console.error('Unexpected error in complete task endpoint:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
