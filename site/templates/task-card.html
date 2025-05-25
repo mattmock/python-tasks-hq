@@ -1,0 +1,12 @@
+<div class="task-card">
+    <div class="task-card__header">
+        <span class="task-card__category">{{category}}</span>
+    </div>
+    <h3 class="task-card__title">{{title}}</h3>
+    <p class="task-card__description">{{description}}</p>
+    {{#if isDaily}}
+    <button class="task-card__complete-btn{{#if completed}} completed{{/if}}" type="button">
+        {{#if completed}}Mark Not Done{{else}}Mark Complete{{/if}}
+    </button>
+    {{/if}}
+</div> 

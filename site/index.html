@@ -9,9 +9,11 @@
             --bg-primary: #1a1a1a;
             --bg-secondary: #2d2d2d;
             --bg-tertiary: #3d3d3d;
+            --bg-tertiary-hover: #4d4d4d;
             --text-primary: #ffffff;
             --text-secondary: #b3b3b3;
             --accent-primary: #646cff;
+            --accent-primary-alpha: rgba(100, 108, 255, 0.2);
             --accent-hover: #535bf2;
             --border-color: #444;
             --border-radius: 0.5rem;
@@ -24,16 +26,24 @@
             font-family: var(--font-family-base);
             background: var(--bg-primary);
             color: var(--text-primary);
+            line-height: 1.5;
         }
 
         * {
             box-sizing: border-box;
         }
+
+        button {
+            font-family: inherit;
+        }
     </style>
     <link rel="stylesheet" href="/site/css/task-list.css">
 </head>
 <body>
-    <div id="task-container"></div>
-    <script type="module" src="/site/js/task-list.js"></script>
+    <div id="task-list" class="task-list"></div>
+    <script type="module">
+        import { TaskList } from '/site/js/components/TaskList.js';
+        new TaskList('task-list');
+    </script>
 </body>
 </html> 

@@ -1,3 +1,81 @@
+/* Import component styles */
+@import './components/task-card.css';
+@import './components/search-bar.css';
+@import './components/confirm-dialog.css';
+
+/* Task list container */
+.task-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header styles */
+.task-list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.task-list__title {
+    font-size: 2rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.task-list__controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.task-list__view-toggle,
+.task-list__reset {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.task-list__view-toggle:hover,
+.task-list__reset:hover {
+    background: var(--accent-primary);
+}
+
+.task-list__reset {
+    padding: 0.75rem;
+    font-size: 1.2rem;
+}
+
+/* Content grid */
+.task-list__content {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .task-list {
+        padding: 1rem;
+    }
+
+    .task-list__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .task-list__content {
+        grid-template-columns: 1fr;
+    }
+}
+
 .task-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -118,66 +196,6 @@
 
 .error-message {
     color: var(--error-color, #ff4444);
-}
-
-.task-list__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding: 1rem;
-}
-
-.task-list__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-}
-
-.task-list__controls {
-    display: flex;
-    gap: 1rem;
-}
-
-.task-list__view-toggle,
-.task-list__reset {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.task-list__view-toggle {
-    background: var(--accent-primary);
-    color: var(--text-primary);
-}
-
-.task-list__view-toggle:hover {
-    background: var(--accent-hover);
-}
-
-.task-list__reset {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 50%;
-    background: var(--accent-primary);
-    color: white;
-    font-size: 1.2rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.task-list__reset:hover {
-    background: var(--accent-hover);
-    transform: rotate(180deg);
 }
 
 .task-list__confirm-dialog {
