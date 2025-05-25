@@ -45,8 +45,14 @@
     transition: background-color 0.3s ease;
 }
 
-.complete-button:hover {
+.complete-button:hover:not(:disabled) {
     background-color: #45a049;
+}
+
+.complete-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
 .task-card.completed .complete-button {
@@ -82,4 +88,31 @@
     right: 0;
     background: linear-gradient(transparent, var(--background-secondary));
     padding-left: 1rem;
+} 
+
+:host {
+    display: block;
+    box-sizing: border-box;
+    width: auto;
+    max-width: 100%;
+    min-width: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: inherit;
+    margin: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.card-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.card-description {
+    color: #444;
+    font-size: 1rem;
+    word-break: break-word;
 } 

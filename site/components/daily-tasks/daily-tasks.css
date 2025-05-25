@@ -1,76 +1,72 @@
-.task-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0.5rem;
-    justify-content: center;
+:host {
+    display: block;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
 }
 
-:host .task-card, .task-card {
-    height: 100%;
-    min-height: 180px;
-    max-height: 280px;
+.daily-tasks {
     width: 100%;
-    max-width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.task-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    min-height: 400px;
 }
 
 /* Responsive adjustments */
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
     .task-grid {
         grid-template-columns: repeat(2, 1fr);
-        max-width: 700px;
     }
 }
 
 @media (max-width: 600px) {
     .task-grid {
         grid-template-columns: 1fr;
-        max-width: 400px;
     }
 }
 
-.daily-tasks {
-    padding: 2rem;
+daily-task-card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 180px;
+    max-height: 280px;
+    display: block;
 }
 
 .completion-message {
     text-align: center;
     padding: 2rem;
-    background-color: var(--background-secondary);
-    border-radius: var(--border-radius);
-    margin-bottom: 2rem;
-}
-
-.completion-message h2 {
-    color: var(--accent-primary);
-    margin-bottom: 1rem;
-}
-
-.completion-message p {
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    color: var(--text-color);
+    display: none;
 }
 
 .shuffle-button {
-    background-color: var(--accent-primary);
+    display: block;
+    margin: 1rem auto;
+    padding: 0.8rem 1.5rem;
+    background-color: var(--accent-color);
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
+    border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease;
 }
 
 .shuffle-button:hover {
     background-color: var(--accent-hover);
-}
-
-.task-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
 } 

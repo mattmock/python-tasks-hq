@@ -6,7 +6,6 @@ export class AllTasks extends BaseComponent {
         super();
         this.allTasks = [];
         this.filteredTasks = [];
-        this.cardElements = [];
         this.selectedCategories = new Set();
         this.initialize();
     }
@@ -29,8 +28,18 @@ export class AllTasks extends BaseComponent {
     }
 
     async loadTemplate() {
-        const response = await fetch('/site/components/all-tasks/all-tasks.html');
-        const template = await response.text();
+        const template = `
+            <div class="search-bar-container">
+                <div class="search-section">
+                    <input type="text" class="search-input" placeholder="Search tasks by name or category..." autocomplete="off" />
+                    <div class="autocomplete-dropdown" style="display: none;"></div>
+                </div>
+                <div class="selected-categories"></div>
+            </div>
+            <div class="task-grid"></div>
+            <div class="empty-message" style="display: none">No tasks found.</div>
+            <div class="error-message" style="display: none">Failed to load tasks.</div>
+        `;
         this.attachTemplate(template);
     }
 
@@ -38,18 +47,51 @@ export class AllTasks extends BaseComponent {
         try {
             const response = await fetch('/tasks');
             const tasks = await response.json();
+            
             // Add IDs to tasks if they don't have them
             this.allTasks = tasks.map((task, index) => ({
                 ...task,
                 id: task.id || `task-${index + 1}`,
                 completed: false
             }));
+            
             this.filteredTasks = this.allTasks;
-            this.renderAllCards(this.allTasks);
-            this.displayTasks(this.filteredTasks);
+            this.renderTasks(this.filteredTasks);
         } catch (error) {
             console.error('Error loading tasks:', error);
+            const errorMessage = this.shadowRoot.querySelector('.error-message');
+            if (errorMessage) errorMessage.style.display = 'block';
         }
+    }
+
+    renderTasks(tasks) {
+        const grid = this.shadowRoot.querySelector('.task-grid');
+        const emptyMessage = this.shadowRoot.querySelector('.empty-message');
+        
+        if (!grid) return;
+
+        // Clear existing cards
+        grid.innerHTML = '';
+        
+        if (!tasks.length) {
+            emptyMessage.style.display = 'block';
+            return;
+        }
+
+        emptyMessage.style.display = 'none';
+        const fragment = document.createDocumentFragment();
+
+        tasks.forEach(task => {
+            const card = new ViewAllTaskCard();
+            card.setAttribute('data-task-id', task.id);
+            card.setAttribute('data-category', task.category);
+            card.setAttribute('data-title', task.title);
+            card.setAttribute('data-description', task.description);
+            card.setAttribute('data-completed', (task.completed || false).toString());
+            fragment.appendChild(card);
+        });
+
+        grid.appendChild(fragment);
     }
 
     setupEventListeners() {
@@ -64,8 +106,7 @@ export class AllTasks extends BaseComponent {
 
         // Show/hide dropdown on focus/blur
         searchInput.addEventListener('focus', () => this.updateDropdown(searchInput.value));
-        searchInput.addEventListener('blur', (e) => {
-            // Delay hiding dropdown to allow for clicks
+        searchInput.addEventListener('blur', () => {
             setTimeout(() => dropdown.style.display = 'none', 200);
         });
 
@@ -103,52 +144,6 @@ export class AllTasks extends BaseComponent {
                 this.updatePills();
                 this.filterTasks();
             }
-        });
-    }
-
-    debounce(fn, delay) {
-        let timeout;
-        return (...args) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => fn.apply(this, args), delay);
-        };
-    }
-
-    fuzzyMatch(text, query) {
-        if (!query) return true;
-        if (!text) return false;
-        // Simple fuzzy match: all query chars must appear in order in text
-        let t = 0, q = 0;
-        text = text.toLowerCase();
-        query = query.toLowerCase();
-        while (t < text.length && q < query.length) {
-            if (text[t] === query[q]) q++;
-            t++;
-        }
-        return q === query.length;
-    }
-
-    renderAllCards(tasks) {
-        const grid = this.shadowRoot.querySelector('.task-grid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        this.cardElements = tasks.map(task => {
-            const taskCard = document.createElement('view-all-task-card');
-            if (task.id) taskCard.setAttribute('data-task-id', task.id);
-            if (task.category) taskCard.setAttribute('data-category', task.category);
-            if (task.title) taskCard.setAttribute('data-title', task.title);
-            if (task.description) taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', (task.completed || false).toString());
-            grid.appendChild(taskCard);
-            return { id: task.id, card: taskCard };
-        });
-    }
-
-    displayTasks(tasks) {
-        // Show/hide cards based on filtered tasks
-        const showIds = new Set(tasks.map(t => t.id));
-        this.cardElements.forEach(({ id, card }) => {
-            card.style.display = showIds.has(id) ? '' : 'none';
         });
     }
 
@@ -221,7 +216,30 @@ export class AllTasks extends BaseComponent {
         }
 
         this.filteredTasks = filtered;
-        this.displayTasks(this.filteredTasks);
+        this.renderTasks(this.filteredTasks);
+    }
+
+    fuzzyMatch(text, query) {
+        if (!query) return true;
+        if (!text) return false;
+        
+        let t = 0, q = 0;
+        text = text.toLowerCase();
+        query = query.toLowerCase();
+        
+        while (t < text.length && q < query.length) {
+            if (text[t] === query[q]) q++;
+            t++;
+        }
+        return q === query.length;
+    }
+
+    debounce(fn, delay) {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn.apply(this, args), delay);
+        };
     }
 }
 

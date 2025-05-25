@@ -12,7 +12,6 @@ export class DailyTasks extends BaseComponent {
             await this.loadStyles();
             await this.loadTemplate();
             await this.loadTasks();
-            this.setupEventListeners();
         } catch (error) {
             console.error('Error initializing DailyTasks:', error);
         }
@@ -25,91 +24,64 @@ export class DailyTasks extends BaseComponent {
     }
 
     async loadTemplate() {
-        const response = await fetch('/site/components/daily-tasks/daily-tasks.html');
-        const template = await response.text();
+        const template = `
+            <div class="task-grid"></div>
+            <div class="empty-message" style="display: none">No tasks found.</div>
+            <div class="error-message" style="display: none">Failed to load tasks.</div>
+        `;
         this.attachTemplate(template);
     }
 
-    setupEventListeners() {
-        const shuffleButton = this.shadowRoot.querySelector('.shuffle-button');
-        if (shuffleButton) {
-            shuffleButton.addEventListener('click', () => this.shuffleTasks());
-        }
-    }
-
     async loadTasks() {
+        const grid = this.shadowRoot.querySelector('.task-grid');
+        const emptyMessage = this.shadowRoot.querySelector('.empty-message');
+        const errorMessage = this.shadowRoot.querySelector('.error-message');
+
         try {
             const response = await fetch('/tasks/today');
             const tasks = await response.json();
-            if (Array.isArray(tasks)) {
-                this.displayTasks(tasks);
-                this.checkCompletionState(tasks);
+
+            // Hide all messages initially
+            emptyMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+            grid.innerHTML = '';
+
+            if (Array.isArray(tasks) && tasks.length > 0) {
+                this.renderTasks(tasks);
             } else {
-                console.error('Invalid tasks response:', tasks);
-                this.displayTasks([]);
-                this.checkCompletionState([]);
+                emptyMessage.style.display = 'block';
             }
-        } catch (error) {
-            console.error('Error loading tasks:', error);
-            this.displayTasks([]);
-            this.checkCompletionState([]);
+        } catch (e) {
+            console.error('Error loading tasks:', e);
+            errorMessage.style.display = 'block';
         }
     }
 
-    async shuffleTasks() {
-        try {
-            const response = await fetch('/tasks/today/shuffle', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const tasks = await response.json();
-            this.displayTasks(tasks);
-            this.checkCompletionState(tasks);
-        } catch (error) {
-            console.error('Error shuffling tasks:', error);
-        }
-    }
-
-    checkCompletionState(tasks) {
-        const completionMessage = this.shadowRoot.querySelector('.completion-message');
-        const taskGrid = this.shadowRoot.querySelector('.task-grid');
-        
-        if (tasks.length === 0) {
-            completionMessage.style.display = 'block';
-            taskGrid.style.display = 'none';
-        } else {
-            completionMessage.style.display = 'none';
-            taskGrid.style.display = 'grid';
-        }
-    }
-
-    async displayTasks(tasks) {
+    renderTasks(tasks) {
         const grid = this.shadowRoot.querySelector('.task-grid');
-        if (!grid) return;
+        const fragment = document.createDocumentFragment();
 
-        // Get completed tasks
-        const completedResponse = await fetch('/tasks/completed');
-        const completedTasks = await completedResponse.json();
-        const completedTaskIds = new Set(completedTasks.map(t => t.id));
-
-        grid.innerHTML = '';
         tasks.forEach(task => {
-            const taskCard = document.createElement('daily-task-card');
-            taskCard.setAttribute('data-task-id', task.id);
-            taskCard.setAttribute('data-category', task.category);
-            taskCard.setAttribute('data-title', task.title);
-            taskCard.setAttribute('data-description', task.description);
-            taskCard.setAttribute('data-completed', completedTaskIds.has(task.id).toString());
+            const card = new DailyTaskCard();
+            card.setAttribute('data-task-id', task.id);
+            card.setAttribute('data-category', task.category);
+            card.setAttribute('data-title', task.title);
+            card.setAttribute('data-description', task.description);
+            card.setAttribute('data-completed', (task.completed || false).toString());
             
-            // Listen for task completion
-            taskCard.addEventListener('daily-task-completed', () => {
-                this.loadTasks(); // Reload tasks to check completion state
-            });
+            // Listen for task completion events
+            card.addEventListener('daily-task-completed', this.handleTaskCompleted.bind(this));
             
-            grid.appendChild(taskCard);
+            fragment.appendChild(card);
         });
+
+        grid.appendChild(fragment);
+    }
+
+    handleTaskCompleted(event) {
+        const { taskId, completed } = event.detail;
+        // Here you could update any internal state or trigger other UI updates
+        console.log(`Task ${taskId} ${completed ? 'completed' : 'uncompleted'}`);
     }
 }
 

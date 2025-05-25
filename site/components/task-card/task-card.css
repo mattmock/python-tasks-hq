@@ -66,25 +66,24 @@
     background-color: var(--bg-tertiary);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
-    max-height: none;
-    overflow-y: visible;
+    height: 120px;
+    max-height: 120px;
+    overflow-y: hidden;
     position: relative;
     margin-bottom: 0.75rem;
-    flex: 1;
     width: 100%;
     box-sizing: border-box;
 }
 
-.task-description.has-overflow::after {
+.task-description::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 30px;
+    height: 40px;
     background: linear-gradient(transparent, var(--bg-tertiary));
     pointer-events: none;
-    opacity: 0.9;
 }
 
 .card-spacer {
@@ -93,22 +92,41 @@
     width: 100%;
 }
 
-.complete-button {
-    margin-top: auto;
+/* Style the complete button both in shadow DOM and when slotted */
+.complete-button,
+::slotted([slot="content"]) .complete-button {
     padding: 0.5rem 1rem;
-    background-color: var(--accent-primary);
-    color: var(--text-primary);
     border: none;
     border-radius: var(--border-radius);
+    background: var(--accent-primary);
+    color: white;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1rem;
     transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     width: 100%;
-    box-sizing: border-box;
+    margin-top: auto;
 }
 
-.complete-button:hover {
-    background-color: var(--accent-hover);
+.complete-button:hover,
+::slotted([slot="content"]) .complete-button:hover {
+    background: var(--accent-hover);
+}
+
+.complete-button:disabled,
+::slotted([slot="content"]) .complete-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--bg-tertiary);
+}
+
+/* Ensure slotted content takes full width */
+::slotted([slot="content"]) {
+    width: 100%;
+    display: block;
 }
 
 .task-card:hover {

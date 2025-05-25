@@ -8,10 +8,10 @@ export class BaseComponent extends HTMLElement {
         this.container.className = 'component-container';
         this.shadowRoot.appendChild(this.container);
         
-        // Add CSS variables to shadow root
+        // Add CSS variables to both shadow root and element itself
         const style = document.createElement('style');
-        style.textContent = `
-            :host {
+        const cssVars = `
+            :host, :root {
                 --bg-primary: #1a1a1a;
                 --bg-secondary: #2d2d2d;
                 --bg-tertiary: #3d3d3d;
@@ -28,13 +28,25 @@ export class BaseComponent extends HTMLElement {
                 --border-radius: 0.5rem;
                 --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                 --font-family-mono: 'JetBrains Mono', monospace;
+                display: block;
             }
 
             .component-container {
                 display: contents;
             }
+
+            /* Allow styles to pierce shadow DOM */
+            ::slotted(*) {
+                all: initial;
+            }
         `;
+        style.textContent = cssVars;
         this.shadowRoot.appendChild(style);
+
+        // Also apply variables to light DOM
+        const lightStyle = document.createElement('style');
+        lightStyle.textContent = cssVars;
+        this.appendChild(lightStyle);
     }
 
     // Helper method to create and attach styles

@@ -7,14 +7,91 @@ export class DailyTaskCard extends TaskCard {
 
     constructor() {
         super();
+        // Add button styles to light DOM
+        const style = document.createElement('style');
+        style.textContent = `
+            .complete-button {
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: var(--border-radius);
+                background: var(--accent-primary);
+                color: white;
+                cursor: pointer;
+                font-size: 1rem;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 100%;
+                margin-top: auto;
+                user-select: none;
+            }
+
+            .complete-button:hover {
+                background: var(--accent-hover);
+            }
+
+            .complete-button.completed {
+                background: var(--bg-tertiary);
+                color: var(--text-secondary);
+            }
+
+            .complete-button.completed:hover {
+                background: var(--bg-secondary);
+                color: var(--text-primary);
+            }
+        `;
+        this.appendChild(style);
+    }
+
+    async initialize() {
+        await super.initialize();
+        this.addCompleteButton();
+        this.setupEventListeners();
+    }
+
+    addCompleteButton() {
+        // Remove existing button if any
+        const existingContainer = this.querySelector('[slot="content"]');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
+
+        const button = document.createElement('button');
+        button.className = 'complete-button';
+        const isCompleted = this.getAttribute('data-completed') === 'true';
+        button.textContent = isCompleted ? 'Mark Not Done' : 'Mark Complete';
+        if (isCompleted) button.classList.add('completed');
+        
+        const container = document.createElement('div');
+        container.slot = 'content';
+        container.appendChild(button);
+        
+        this.appendChild(container);
     }
 
     setupEventListeners() {
-        const button = this.shadowRoot.querySelector('button[slot="content"]');
+        const button = this.querySelector('.complete-button');
         if (button) {
-            button.removeEventListener('click', this._boundMarkComplete);
+            // Remove old listener if exists
+            if (this._boundMarkComplete) {
+                button.removeEventListener('click', this._boundMarkComplete);
+            }
             this._boundMarkComplete = this.markComplete.bind(this);
             button.addEventListener('click', this._boundMarkComplete);
+        }
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue);
+        if (name === 'data-completed' && oldValue !== newValue) {
+            const button = this.querySelector('.complete-button');
+            if (button) {
+                const isCompleted = newValue === 'true';
+                button.textContent = isCompleted ? 'Mark Not Done' : 'Mark Complete';
+                button.classList.toggle('completed', isCompleted);
+            }
         }
     }
 
@@ -25,58 +102,40 @@ export class DailyTaskCard extends TaskCard {
         try {
             const response = await fetch(`/tasks/today/${taskId}/complete`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed: !completed })
             });
             
             if (response.ok) {
+                // Update the attribute which will trigger attributeChangedCallback
                 this.setAttribute('data-completed', (!completed).toString());
-                // Update button text
-                const button = this.shadowRoot.querySelector('button[slot="content"]');
-                if (button) button.textContent = !completed ? 'Mark Incomplete' : 'Mark Complete';
                 
-                // Add visual feedback
-                this.classList.toggle('completed', !completed);
+                // Dispatch event for parent components
+                this.dispatchEvent(new CustomEvent('daily-task-completed', {
+                    bubbles: true,
+                    composed: true,
+                    detail: { taskId, completed: !completed }
+                }));
             } else {
-                console.error('Failed to mark task as complete');
+                console.error('Failed to update task completion status');
+                throw new Error('Failed to update task completion status');
             }
         } catch (error) {
-            console.error('Error marking task as complete:', error);
+            console.error('Error updating task completion status:', error);
+            // Show error to user
+            const button = this.querySelector('.complete-button');
+            if (button) {
+                const originalText = button.textContent;
+                const originalClass = button.className;
+                button.textContent = 'Error!';
+                button.style.background = '#ff4444';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                    button.className = originalClass;
+                }, 2000);
+            }
         }
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
-            this.updateContent();
-        }
-    }
-
-    updateContent() {
-        super.updateContent();
-        // Render the button in the slot
-        this.renderContentSlot();
-        this.setupEventListeners();
-    }
-
-    renderContentSlot() {
-        // Remove any existing button in the slot
-        const oldButton = this.shadowRoot.querySelector('button[slot="content"]');
-        if (oldButton) oldButton.remove();
-        // Create and append the button to the card, not the header
-        const card = this.shadowRoot.querySelector('.task-card');
-        if (card) {
-            const button = document.createElement('button');
-            button.className = 'complete-button';
-            button.setAttribute('slot', 'content');
-            button.textContent = this.getAttribute('data-completed') === 'true' ? 'Mark Incomplete' : 'Mark Complete';
-            card.appendChild(button);
-        }
-    }
-
-    checkDescriptionOverflow(descriptionEl) {
-        const hasOverflow = descriptionEl.scrollHeight > descriptionEl.clientHeight;
-        descriptionEl.classList.toggle('has-overflow', hasOverflow);
     }
 }
 

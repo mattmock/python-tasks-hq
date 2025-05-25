@@ -11,10 +11,14 @@ export class TaskCard extends BaseComponent {
     }
 
     async initialize() {
-        await this.loadStyles();
-        await this.loadTemplate();
-        this.setupEventListeners();
-        this.updateContent();
+        try {
+            await this.loadStyles();
+            await this.loadTemplate();
+            this.setupEventListeners();
+            this.updateContent();
+        } catch (error) {
+            console.error('Error initializing TaskCard:', error);
+        }
     }
 
     async loadStyles() {
@@ -30,12 +34,12 @@ export class TaskCard extends BaseComponent {
     }
 
     setupEventListeners() {
-        // To be implemented by child classes
-    }
-
-    // Abstract methods to be implemented by child classes
-    markComplete() {
-        throw new Error('markComplete() must be implemented by child class');
+        const button = this.shadowRoot.querySelector('.complete-button');
+        if (button) {
+            button.removeEventListener('click', this._boundMarkComplete);
+            this._boundMarkComplete = this.markComplete.bind(this);
+            button.addEventListener('click', this._boundMarkComplete);
+        }
     }
 
     getTaskData() {
@@ -49,35 +53,53 @@ export class TaskCard extends BaseComponent {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) this.updateContent();
+        if (oldValue !== newValue) {
+            this.updateContent();
+        }
     }
 
     updateContent() {
         const taskData = this.getTaskData();
-        const categoryEl = this.shadowRoot.querySelector('.task-category');
-        const titleEl = this.shadowRoot.querySelector('.task-title');
-        const descriptionEl = this.shadowRoot.querySelector('.task-description');
-        const completeButton = this.shadowRoot.querySelector('.complete-button');
-        const cardEl = this.shadowRoot.querySelector('.task-card');
+        const card = this.shadowRoot.querySelector('.task-card');
+        if (!card) return;
+
+        // Update card completion state
+        card.classList.toggle('completed', taskData.completed);
+
+        // Update category
+        const categoryEl = card.querySelector('.task-category');
         if (categoryEl) categoryEl.textContent = taskData.category || '';
+
+        // Update title
+        const titleEl = card.querySelector('.task-title');
         if (titleEl) titleEl.textContent = taskData.title || '';
-        if (descriptionEl) descriptionEl.innerHTML = this.renderCodeBlocks(taskData.description || '');
-        if (completeButton) completeButton.textContent = taskData.completed ? 'Mark Incomplete' : 'Mark Complete';
-        if (cardEl) cardEl.classList.toggle('completed', taskData.completed);
+
+        // Update description
+        const descriptionEl = card.querySelector('.task-description');
+        if (descriptionEl) {
+            descriptionEl.innerHTML = this.renderCodeBlocks(taskData.description || '');
+        }
+
+        // Update complete button
+        const button = card.querySelector('.complete-button');
+        if (button) {
+            button.textContent = taskData.completed ? 'Completed' : 'Mark Complete';
+            button.disabled = taskData.completed;
+        }
     }
 
     renderCodeBlocks(text) {
         if (!text) return '';
-        // Replace text between backticks with <code> blocks, escaping HTML
         return text.replace(/`([^`]+)`/g, (match, code) => {
-            return `<code>${this.escapeHtml(code)}</code>`;
+            const div = document.createElement('div');
+            div.textContent = code;
+            return `<code>${div.innerHTML}</code>`;
         });
     }
 
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+    // Abstract method to be implemented by child classes
+    markComplete() {
+        throw new Error('markComplete() must be implemented by child class');
     }
 }
 

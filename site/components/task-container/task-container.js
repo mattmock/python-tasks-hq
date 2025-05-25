@@ -72,7 +72,7 @@ export class TaskContainer extends BaseComponent {
 
                         // Reload daily tasks
                         if (dailyTasks) {
-                            dailyTasks.reload();
+                            dailyTasks.loadTasks();
                         }
                     } catch (error) {
                         console.error('Error resetting tasks:', error);

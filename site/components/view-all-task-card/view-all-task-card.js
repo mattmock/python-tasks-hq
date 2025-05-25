@@ -18,19 +18,6 @@ export class ViewAllTaskCard extends TaskCard {
             this.updateContent();
         }
     }
-
-    updateContent() {
-        super.updateContent();  // Use the base class's updateContent which handles code blocks
-        const descriptionEl = this.shadowRoot.querySelector('.task-description');
-        if (descriptionEl) {
-            this.checkDescriptionOverflow(descriptionEl);
-        }
-    }
-
-    checkDescriptionOverflow(descriptionEl) {
-        const hasOverflow = descriptionEl.scrollHeight > descriptionEl.clientHeight;
-        descriptionEl.classList.toggle('has-overflow', hasOverflow);
-    }
 }
 
 customElements.define('view-all-task-card', ViewAllTaskCard); 
