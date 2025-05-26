@@ -25,4 +25,5 @@ yarn.lock
 Thumbs.db
 
 # Application state
-data/state/ 
+data/state/
+*.code-workspace 
