@@ -1,6 +1,7 @@
 import { TaskCard } from './TaskCard.js';
 import { SearchBar } from './SearchBar.js';
 import { ConfirmDialog } from './ConfirmDialog.js';
+import { loadTemplate } from '../utils/template.js';
 
 /**
  * Main TaskList component that manages the task list interface
@@ -32,17 +33,8 @@ export class TaskList {
      * Creates the initial template
      */
     async createTemplate() {
-        this.container.innerHTML = `
-            <header class="task-list__header">
-                <h1 class="task-list__title">Daily Python Tasks</h1>
-                <div class="task-list__controls">
-                    <button class="task-list__view-toggle">View All Tasks</button>
-                    <button class="task-list__reset" title="Reset Tasks">↺</button>
-                </div>
-            </header>
-            <div class="task-list__search-container"></div>
-            <div class="task-list__content"></div>
-        `;
+        const template = await loadTemplate('/site/templates/task-list.html');
+        this.container.appendChild(template);
     }
 
     /**

@@ -1,3 +1,5 @@
+import { loadTemplate, handleConditional } from '../utils/template.js';
+
 /**
  * Represents a task card in the UI
  */
@@ -33,27 +35,17 @@ export class TaskCard {
         const response = await fetch('/site/templates/task-card.html');
         let template = await response.text();
         
-        // Replace template variables with a more robust approach
+        // Handle conditional sections
+        template = handleConditional(template, 'isDaily', this.view === 'daily');
+        template = handleConditional(template, 'completed', this.data.completed);
+        
+        // Replace template variables
         const replacements = {
             '{{category}}': this.data.category,
             '{{title}}': this.data.title,
-            '{{description}}': this.data.description,
-            '{{#if isDaily}}': this.view === 'daily' ? '' : '<!--',
-            '{{/if}}': this.view === 'daily' ? '' : '-->',
-            '{{#if completed}}': this.data.completed ? '' : '<!--',
-            '{{/if}}': this.data.completed ? '' : '-->'
+            '{{description}}': this.data.description
         };
-
-        // Replace all occurrences
-        template = Object.entries(replacements).reduce((str, [find, replace]) => 
-            str.replaceAll(find, replace), template);
-
-        // Handle the conditional text for the button
-        template = template.replace(
-            /{{#if completed}}(.*?){{else}}(.*?){{\/if}}/g,
-            this.data.completed ? 'Mark Not Done' : 'Mark Complete'
-        );
-
+        
         const el = document.createElement('div');
         el.innerHTML = template.trim();
         return el.firstChild;

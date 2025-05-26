@@ -1,3 +1,5 @@
+import { loadTemplate } from '../utils/template.js';
+
 /**
  * Represents a confirmation dialog component
  */
@@ -18,13 +20,7 @@ export class ConfirmDialog {
      * @returns {Promise<HTMLElement>} The initialized dialog element
      */
     async initialize() {
-        const response = await fetch('/site/templates/confirm-dialog.html');
-        const template = await response.text();
-        
-        const el = document.createElement('div');
-        el.innerHTML = template.trim();
-        this.element = el.firstChild;
-        
+        this.element = await loadTemplate('/site/templates/confirm-dialog.html');
         this.setupEventListeners();
         document.body.appendChild(this.element);
         this.hide();

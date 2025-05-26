@@ -1,5 +1,6 @@
 import { debounce } from '../utils/debounce.js';
 import { fuzzyMatch } from '../utils/fuzzyMatch.js';
+import { loadTemplate } from '../utils/template.js';
 
 /**
  * Represents the search bar component with category filtering
@@ -20,13 +21,7 @@ export class SearchBar {
      * @returns {Promise<HTMLElement>} The initialized search bar element
      */
     async initialize() {
-        const response = await fetch('/site/templates/search-bar.html');
-        const template = await response.text();
-        
-        const el = document.createElement('div');
-        el.innerHTML = template.trim();
-        this.element = el.firstChild;
-        
+        this.element = await loadTemplate('/site/templates/search-bar.html');
         this.setupEventListeners();
         return this.element;
     }
@@ -121,11 +116,13 @@ export class SearchBar {
         const container = this.element.querySelector('.selected-categories');
         if (!container) return;
 
-        const response = await fetch('/site/templates/category-pill.html');
-        const template = await response.text();
-
+        const template = await loadTemplate('/site/templates/category-pill.html');
         container.innerHTML = Array.from(this.selectedCategories)
-            .map(category => template.replace('{{category}}', category))
+            .map(category => {
+                const pill = template.cloneNode(true);
+                pill.querySelector('.category-pill').textContent = category;
+                return pill.outerHTML;
+            })
             .join('');
     }
 
